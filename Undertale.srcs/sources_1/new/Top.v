@@ -7,6 +7,8 @@
 
 module Top(
     input wire CLK,         // Onboard clock 100MHz : INPUT Pin W5
+    input wire PS2Clk,
+    input wire PS2Data,
     input wire btnC,       // Reset button / Centre Button : INPUT Pin U18
     output wire HSYNC,      // VGA horizontal sync : OUTPUT Pin P19
     output wire VSYNC,      // VGA vertical sync : OUTPUT Pin R19
@@ -36,7 +38,7 @@ module Top(
     BeeSprite BeeDisplay (.xx(x),.yy(y),.aactive(active),
                           .BSpriteOn(BeeSpriteOn),.dataout(dout),
                           .BR(btnR),.BL(btnL),.BU(btnU),.BD(btnD),
-                          .Pclk(PixCLK));
+                          .Pclk(PixCLK),.clk(CLK),.Kclk(PS2Clk),.Kdata(PS2Data));
     // instantiate BulletBoxSprite code
     wire BBSpriteOn;       // 1=on, 0=off
     wire [7:0] BBout;        // pixel value from Bee.mem
@@ -46,9 +48,9 @@ module Top(
     // instantiate BulletBoxSprite code
     wire BBSpriteOn;       // 1=on, 0=off
     wire [7:0] B1out;        // pixel value from Bee.mem
-    BulletSprite BulletDisplay (.xx(x),.yy(y),.aactive(active),
-                          .BBSpriteOn(BBSpriteOn),.dataout(B1out),
-                          .Pclk(PixCLK));
+    //BulletSprite BulletDisplay (.xx(x),.yy(y),.aactive(active),
+    //                      .BBSpriteOn(BBSpriteOn),.dataout(B1out),
+    //                      .Pclk(PixCLK));
     // load colour palette
     reg [7:0] palette [0:191];  // 8 bit values from the 192 hex entries in the colour palette
     reg [7:0] COL = 0;          // background colour palette value
