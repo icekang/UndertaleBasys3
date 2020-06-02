@@ -16,12 +16,26 @@ module BeeSprite(
     input wire BL, // left button
     input wire BU,
     input wire BD,
-    input wire Pclk // 25MHz pixel clock
+    input wire Pclk, // 25MHz pixel clock
+    input wire clk,
+    input wire Kclk,
+    input wire Kdata
+    
     );
 
     // instantiate BeeRom code
     reg [9:0] address; // 2^10 or 1024, need 34 x 27 = 918
     BeeRom BeeVRom (.i_addr(address),.i_clk2(Pclk),.o_data(dataout));
+    
+    wire [7:0] key;
+    wire flag;
+    KBinput KBinput (
+        .clk(clk),
+        .kclk(Kclk),
+        .kdata(Kdata),
+        .dataOut(key),
+        .oflag(flag)
+    );
             
     // setup character positions and sizes
     reg [9:0] BeeX = 297; // Bee X start position
@@ -42,6 +56,11 @@ module BeeSprite(
                     BeeY<=BeeY+1;
                 if (BU == 1 && BeeY>1)
                     BeeY<=BeeY-1;
+                    
+                 if (key == 8'h1d && BeeY<480-BeeHeight)
+                    BeeY<=BeeY+1;
+                 if (key == 8'h1b && BeeY>1)
+                    BeeY<=BeeY-1;
             end    
         if (aactive)
             begin // check if xx,yy are within the confines of the Bee character
@@ -58,5 +77,5 @@ module BeeSprite(
                 else
                     BSpriteOn <=0;
             end
-    end
+        end
 endmodule

@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+
+*.pb
+=======
 vivado.jou
 vivado.log
 vivado_pid*.str
@@ -7,3 +11,4 @@ Undertale.ip_user_files/
 Undertale.runs/
 Undertale.sim/
 vivado*
+>>>>>>> 1f2aa3cd4b87761535d5aa873f448cad0b5cf857
