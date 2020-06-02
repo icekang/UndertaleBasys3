@@ -26,8 +26,8 @@ module BeeSprite(
     // setup character positions and sizes
     reg [9:0] BeeX = 297; // Bee X start position
     reg [8:0] BeeY = 433; // Bee Y start position
-    localparam BeeWidth = 24; // Bee width in pixels
-    localparam BeeHeight = 24; // Bee height in pixels
+    localparam BeeWidth = 25; // Bee width in pixels
+    localparam BeeHeight = 23; // Bee height in pixels
   
     always @ (posedge Pclk)
     begin

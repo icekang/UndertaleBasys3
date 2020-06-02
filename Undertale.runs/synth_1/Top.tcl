@@ -38,6 +38,7 @@ read_mem {
   {C:/DATA/HW SYN LAB/Final Project/Undertale/Undertale.srcs/sources_1/new/bullet.mem}
 }
 read_verilog -library xil_defaultlib {
+  {C:/DATA/HW SYN LAB/Final Project/Undertale/Undertale.srcs/sources_1/new/BulletBoxSprite.v}
   {C:/DATA/HW SYN LAB/Final Project/Undertale/Undertale.srcs/sources_1/new/HeartRom.v}
   {C:/DATA/HW SYN LAB/Final Project/Undertale/Undertale.srcs/sources_1/new/HeartSprites.v}
   {C:/DATA/HW SYN LAB/Final Project/Undertale/Undertale.srcs/sources_1/new/vga800x600.v}

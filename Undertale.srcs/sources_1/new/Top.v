@@ -14,7 +14,9 @@ module Top(
     output reg [3:0] GREEN, // 4-bit VGA Green : OUTPUT Pin J17, Pin H17, Pin G17, Pin D17
     output reg [3:0] BLUE,  // 4-bit VGA Blue : OUTPUT Pin N18, Pin L18, Pin K18, Pin J18/ 4-bit VGA Blue : OUTPUT Pin N18, Pin L18, Pin K18, Pin J18
     input btnR,             // Right button : INPUT Pin T17
-    input btnL              // Left button : INPUT Pin W19
+    input btnL,              // Left button : INPUT Pin W19
+    input btnU,
+    input btnD
     );
     
     wire rst = btnC;       // Setup Reset button
@@ -35,6 +37,12 @@ module Top(
                           .BSpriteOn(BeeSpriteOn),.dataout(dout),
                           .BR(btnR),.BL(btnL),.BU(btnU),.BD(btnD),
                           .Pclk(PixCLK));
+    // instantiate BulletBoxSprite code
+    wire BBSpriteOn;       // 1=on, 0=off
+    wire [7:0] BBout;        // pixel value from Bee.mem
+    BulletBoxSprite BBSprite (.xx(x),.yy(y),.aactive(active),
+                          .BBSpriteOn(BBSpriteOn),.dataout(BBout),
+                          .Pclk(PixCLK));
     // load colour palette
     reg [7:0] palette [0:191];  // 8 bit values from the 192 hex entries in the colour palette
     reg [7:0] COL = 0;          // background colour palette value
@@ -52,6 +60,13 @@ module Top(
                         RED <= (palette[(dout*3)])>>4;          // RED bits(7:4) from colour palette
                         GREEN <= (palette[(dout*3)+1])>>4;      // GREEN bits(7:4) from colour palette
                         BLUE <= (palette[(dout*3)+2])>>4;       // BLUE bits(7:4) from colour palette
+                    end
+                else
+                if (BBSpriteOn==1)
+                    begin
+                        RED <= (palette[(BBout*3)])>>4;          // RED bits(7:4) from colour palette
+                        GREEN <= (palette[(BBout*3)+1])>>4;      // GREEN bits(7:4) from colour palette
+                        BLUE <= (palette[(BBout*3)+2])>>4;       // BLUE bits(7:4) from colour palette
                     end
                 else
                     begin
