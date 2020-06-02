@@ -43,6 +43,12 @@ module Top(
     BulletBoxSprite BBSprite (.xx(x),.yy(y),.aactive(active),
                           .BBSpriteOn(BBSpriteOn),.dataout(BBout),
                           .Pclk(PixCLK));
+    // instantiate BulletBoxSprite code
+    wire BBSpriteOn;       // 1=on, 0=off
+    wire [7:0] B1out;        // pixel value from Bee.mem
+    BulletSprite BulletDisplay (.xx(x),.yy(y),.aactive(active),
+                          .BBSpriteOn(BBSpriteOn),.dataout(B1out),
+                          .Pclk(PixCLK));
     // load colour palette
     reg [7:0] palette [0:191];  // 8 bit values from the 192 hex entries in the colour palette
     reg [7:0] COL = 0;          // background colour palette value
