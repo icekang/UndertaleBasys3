@@ -26,7 +26,7 @@ module Top(
     wire [9:0] y;           // pixel y position: 10-bit value: 0-1023 : only need 525
     wire active;            // high during active pixel drawing
     wire PixCLK;            // 25MHz pixel clock
-    vga640x480 display (.i_clk(CLK),.i_rst(rst),.o_hsync(HSYNC), 
+    vga800x600 display (.i_clk(CLK),.i_rst(rst),.o_hsync(HSYNC), 
                         .o_vsync(VSYNC),.o_x(x),.o_y(y),.o_active(active),
                         .pix_clk(PixCLK));
       
@@ -42,6 +42,12 @@ module Top(
     wire [7:0] BBout;        // pixel value from Bee.mem
     BulletBoxSprite BBSprite (.xx(x),.yy(y),.aactive(active),
                           .BBSpriteOn(BBSpriteOn),.dataout(BBout),
+                          .Pclk(PixCLK));
+    // instantiate BulletBoxSprite code
+    wire BBSpriteOn;       // 1=on, 0=off
+    wire [7:0] B1out;        // pixel value from Bee.mem
+    BulletSprite BulletDisplay (.xx(x),.yy(y),.aactive(active),
+                          .BBSpriteOn(BBSpriteOn),.dataout(B1out),
                           .Pclk(PixCLK));
     // load colour palette
     reg [7:0] palette [0:191];  // 8 bit values from the 192 hex entries in the colour palette

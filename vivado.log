@@ -236,3 +236,4 @@ launch_runs impl_1 -jobs 4
 [Wed Jun  3 01:02:44 2020] Launched impl_1...
 Run output will be captured here: D:/HWLab/UndertaleBasys3/UndertaleBasys3/Undertale.runs/impl_1/runme.log
 update_compile_order -fileset sources_1
+update_compile_order -fileset sources_1
