@@ -21,7 +21,7 @@ module BulletSprite(
 
     // setup character positions and sizes
     localparam BXstart = 50;
-    localparam BYstart = 150;
+    localparam BYstart = 275;
     reg [9:0] BX = BXstart;            // Alien1 X start position
     reg [9:0] BY = BYstart;             // Alien1 Y start position
     localparam BWidth = 12;        // Alien1 width in pixels
@@ -89,7 +89,7 @@ module BulletSprite(
                                 BYAccDel<=BYAccDel+1;
                                 if (BYAccDel == 0)
                                     BYvel=BYvel+BYacc;
-                                if (BX + BWidth + (BcolCount-1)*BOffset>800 ||BY>450)
+                                if (BY>525)
                                     begin
                                         Bdir<=0;
                                         BYvel<=0;
