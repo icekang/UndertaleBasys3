@@ -709,3 +709,17 @@ dismissDialog("Program Device"); // bx (cp)
 // TclEventType: FILE_SET_CHANGE
 // TclEventType: DG_GRAPH_STALE
 // TclEventType: FILE_SET_CHANGE
+// Elapsed time: 419 seconds
+selectCodeEditor("Top.v", 427, 165); // cl (w, cp)
+selectTab("PlanAheadTabBaseWorkspace_JideTabbedPane", (HResource) null, "vga800x600.v", 1); // k (j, cp)
+selectCodeEditor("vga800x600.v", 269, 144); // cl (w, cp)
+// Elapsed time: 14 seconds
+selectCodeEditor("vga800x600.v", 120, 99); // cl (w, cp)
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: FILE_SET_CHANGE
+// Tcl Message: update_compile_order -fileset sources_1 
+selectCodeEditor("vga800x600.v", 111, 91); // cl (w, cp)
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: DG_GRAPH_STALE
