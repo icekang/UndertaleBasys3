@@ -705,3 +705,7 @@ dismissDialog("Program Device"); // bC (cp)
 dismissDialog("Program Device"); // bx (cp)
 // TclEventType: DG_GRAPH_STALE
 // TclEventType: FILE_SET_CHANGE
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: FILE_SET_CHANGE
