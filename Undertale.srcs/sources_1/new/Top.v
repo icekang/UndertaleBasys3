@@ -49,6 +49,12 @@ module Top(
     BulletSprite BulletDisplay (.xx(x),.yy(y),.aactive(active),
                           .BSpriteOn(BulletSpriteOn),.Bdataout(B1out),
                           .Pclk(PixCLK));
+    // instantiate BulletBoxSprite code
+    wire NokauanSpriteOn;       // 1=on, 0=off
+    wire [7:0] Nokout;        // pixel value from Bee.mem
+    NokauanSprite NokauanDisplay (.xx(x),.yy(y),.aactive(active),
+                          .SpriteOn(NokauanSpriteOn),.dataout(Nokout),
+                          .Pclk(PixCLK));
     // load colour palette
     reg [7:0] palette [0:191];  // 8 bit values from the 192 hex entries in the colour palette
     reg [7:0] COL = 0;          // background colour palette value
@@ -80,6 +86,13 @@ module Top(
                         RED <= (palette[(B1out*3)])>>4;          // RED bits(7:4) from colour palette
                         GREEN <= (palette[(B1out*3)+1])>>4;      // GREEN bits(7:4) from colour palette
                         BLUE <= (palette[(B1out*3)+2])>>4;       // BLUE bits(7:4) from colour palette
+                    end
+                else
+                if (NokauanSpriteOn==1)
+                    begin
+                        RED <= (palette[(Nokout*3)])>>4;          // RED bits(7:4) from colour palette
+                        GREEN <= (palette[(Nokout*3)+1])>>4;      // GREEN bits(7:4) from colour palette
+                        BLUE <= (palette[(Nokout*3)+2])>>4;       // BLUE bits(7:4) from colour palette
                     end
                 else
                     begin
