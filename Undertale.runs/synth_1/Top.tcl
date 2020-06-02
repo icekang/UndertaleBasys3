@@ -23,26 +23,26 @@ create_project -in_memory -part xc7a35tcpg236-1
 set_param project.singleFileAddWarning.threshold 0
 set_param project.compositeFile.enableAutoGeneration 0
 set_param synth.vivado.isSynthRun true
-set_property webtalk.parent_dir {C:/DATA/HW SYN LAB/Final Project/Undertale/Undertale.cache/wt} [current_project]
-set_property parent.project_path {C:/DATA/HW SYN LAB/Final Project/Undertale/Undertale.xpr} [current_project]
+set_property webtalk.parent_dir D:/HWLab/UndertaleBasys3/UndertaleBasys3/Undertale.cache/wt [current_project]
+set_property parent.project_path D:/HWLab/UndertaleBasys3/UndertaleBasys3/Undertale.xpr [current_project]
 set_property default_lib xil_defaultlib [current_project]
 set_property target_language Verilog [current_project]
 set_property board_part digilentinc.com:basys3:part0:1.1 [current_project]
-set_property ip_output_repo {c:/DATA/HW SYN LAB/Final Project/Undertale/Undertale.cache/ip} [current_project]
+set_property ip_output_repo d:/HWLab/UndertaleBasys3/UndertaleBasys3/Undertale.cache/ip [current_project]
 set_property ip_cache_permissions {read write} [current_project]
 read_mem {
-  {C:/DATA/HW SYN LAB/Final Project/Undertale/Undertale.srcs/sources_1/new/Bee.mem}
-  {C:/DATA/HW SYN LAB/Final Project/Undertale/Undertale.srcs/sources_1/new/pal24bit.mem}
-  {C:/DATA/HW SYN LAB/Final Project/Undertale/Undertale.srcs/sources_1/new/heart.mem}
-  {C:/DATA/HW SYN LAB/Final Project/Undertale/Undertale.srcs/sources_1/new/palall.mem}
-  {C:/DATA/HW SYN LAB/Final Project/Undertale/Undertale.srcs/sources_1/new/bullet.mem}
+  D:/HWLab/UndertaleBasys3/UndertaleBasys3/Undertale.srcs/sources_1/new/Bee.mem
+  D:/HWLab/UndertaleBasys3/UndertaleBasys3/Undertale.srcs/sources_1/new/pal24bit.mem
+  D:/HWLab/UndertaleBasys3/UndertaleBasys3/Undertale.srcs/sources_1/new/heart.mem
+  D:/HWLab/UndertaleBasys3/UndertaleBasys3/Undertale.srcs/sources_1/new/palall.mem
+  D:/HWLab/UndertaleBasys3/UndertaleBasys3/Undertale.srcs/sources_1/new/bullet.mem
 }
 read_verilog -library xil_defaultlib {
-  {C:/DATA/HW SYN LAB/Final Project/Undertale/Undertale.srcs/sources_1/new/BulletBoxSprite.v}
-  {C:/DATA/HW SYN LAB/Final Project/Undertale/Undertale.srcs/sources_1/new/HeartRom.v}
-  {C:/DATA/HW SYN LAB/Final Project/Undertale/Undertale.srcs/sources_1/new/HeartSprites.v}
-  {C:/DATA/HW SYN LAB/Final Project/Undertale/Undertale.srcs/sources_1/new/vga800x600.v}
-  {C:/DATA/HW SYN LAB/Final Project/Undertale/Undertale.srcs/sources_1/new/Top.v}
+  D:/HWLab/UndertaleBasys3/UndertaleBasys3/Undertale.srcs/sources_1/new/BulletBoxSprite.v
+  D:/HWLab/UndertaleBasys3/UndertaleBasys3/Undertale.srcs/sources_1/new/HeartRom.v
+  D:/HWLab/UndertaleBasys3/UndertaleBasys3/Undertale.srcs/sources_1/new/HeartSprites.v
+  D:/HWLab/UndertaleBasys3/UndertaleBasys3/Undertale.srcs/sources_1/new/vga800x600.v
+  D:/HWLab/UndertaleBasys3/UndertaleBasys3/Undertale.srcs/sources_1/new/Top.v
 }
 # Mark all dcp files as not used in implementation to prevent them from being
 # stitched into the results of this synthesis run. Any black boxes in the
@@ -52,8 +52,8 @@ read_verilog -library xil_defaultlib {
 foreach dcp [get_files -quiet -all -filter file_type=="Design\ Checkpoint"] {
   set_property used_in_implementation false $dcp
 }
-read_xdc {{C:/DATA/HW SYN LAB/Final Project/Undertale/Undertale.srcs/constrs_1/new/basys3.xdc}}
-set_property used_in_implementation false [get_files {{C:/DATA/HW SYN LAB/Final Project/Undertale/Undertale.srcs/constrs_1/new/basys3.xdc}}]
+read_xdc D:/HWLab/UndertaleBasys3/UndertaleBasys3/Undertale.srcs/constrs_1/new/basys3.xdc
+set_property used_in_implementation false [get_files D:/HWLab/UndertaleBasys3/UndertaleBasys3/Undertale.srcs/constrs_1/new/basys3.xdc]
 
 set_param ips.enableIPCacheLiteLoad 1
 close [open __synthesis_is_running__ w]

@@ -1,8 +1,8 @@
 Copyright 1986-2018 Xilinx, Inc. All Rights Reserved.
 -------------------------------------------------------------------------------------------------------------------------------
 | Tool Version     : Vivado v.2018.3 (win64) Build 2405991 Thu Dec  6 23:38:27 MST 2018
-| Date             : Tue Jun  2 23:48:34 2020
-| Host             : LAPTOP-7T79T52Q running 64-bit major release  (build 9200)
+| Date             : Wed Jun  3 00:27:00 2020
+| Host             : DESKTOP-QO8A15H running 64-bit major release  (build 9200)
 | Command          : report_power -file Top_power_routed.rpt -pb Top_power_summary_routed.pb -rpx Top_power_routed.rpx
 | Design           : Top
 | Device           : xc7a35tcpg236-1
@@ -33,7 +33,7 @@ Table of Contents
 | Total On-Chip Power (W)  | 0.073        |
 | Design Power Budget (W)  | Unspecified* |
 | Power Budget Margin (W)  | NA           |
-| Dynamic (W)              | 0.001        |
+| Dynamic (W)              | 0.002        |
 | Device Static (W)        | 0.072        |
 | Effective TJA (C/W)      | 5.0          |
 | Max Ambient (C)          | 84.6         |
@@ -53,13 +53,13 @@ Table of Contents
 | On-Chip        | Power (W) | Used     | Available | Utilization (%) |
 +----------------+-----------+----------+-----------+-----------------+
 | Clocks         |    <0.001 |        3 |       --- |             --- |
-| Slice Logic    |    <0.001 |      325 |       --- |             --- |
-|   LUT as Logic |    <0.001 |      168 |     20800 |            0.81 |
-|   CARRY4       |    <0.001 |       24 |      8150 |            0.29 |
+| Slice Logic    |    <0.001 |      360 |       --- |             --- |
+|   LUT as Logic |    <0.001 |      192 |     20800 |            0.92 |
+|   CARRY4       |    <0.001 |       28 |      8150 |            0.34 |
+|   Register     |    <0.001 |       84 |     41600 |            0.20 |
 |   BUFG         |    <0.001 |        1 |        32 |            3.13 |
-|   Register     |    <0.001 |       69 |     41600 |            0.17 |
 |   Others       |     0.000 |       11 |       --- |             --- |
-| Signals        |    <0.001 |      175 |       --- |             --- |
+| Signals        |    <0.001 |      212 |       --- |             --- |
 | Block RAM      |     0.000 |      0.5 |        50 |            1.00 |
 | I/O            |    <0.001 |       20 |       106 |           18.87 |
 | Static Power   |     0.072 |          |           |                 |
@@ -73,7 +73,7 @@ Table of Contents
 +-----------+-------------+-----------+-------------+------------+
 | Source    | Voltage (V) | Total (A) | Dynamic (A) | Static (A) |
 +-----------+-------------+-----------+-------------+------------+
-| Vccint    |       1.000 |     0.010 |       0.001 |      0.010 |
+| Vccint    |       1.000 |     0.011 |       0.001 |      0.010 |
 | Vccaux    |       1.800 |     0.013 |       0.000 |      0.013 |
 | Vcco33    |       3.300 |     0.001 |       0.000 |      0.001 |
 | Vcco25    |       2.500 |     0.000 |       0.000 |      0.000 |
@@ -141,6 +141,8 @@ Table of Contents
 
 +------+-----------+
 | Name | Power (W) |
++------+-----------+
+| Top  |     0.002 |
 +------+-----------+
 
 

@@ -6,36 +6,36 @@
 `timescale 1ns / 1ps
 
 // Setup vga640x480 Module
-module vga640x480(
+module vga800x600(
     input wire i_clk,       // 100MHz onboard clock
     input wire i_rst,       // reset
     output wire o_hsync,    // horizontal sync
     output wire o_vsync,    // vertical sync
-    output wire [9:0] o_x,  // current pixel x position
-    output wire [9:0] o_y,  // current pixel y position
+    output wire [10:0] o_x,  // current pixel x position
+    output wire [10:0] o_y,  // current pixel y position
     output wire o_active,   // high during active pixel drawing
     output reg pix_clk      // 25MHz pixel clock
     );
 	
     // VGA 640x480 Horizontal Timing (line)
-	localparam HACTIVE     = 640;                      // horizontal visible area
-	localparam HBACKPORCH  = 48;                       // horizontal back porch
-	localparam HFRONTPORCH = 16;                       // horizontal front porch
-	localparam HSYNC       = 96;                       // horizontal sync pulse
+	localparam HACTIVE     = 800;                      // horizontal visible area
+	localparam HBACKPORCH  = 88;                       // horizontal back porch
+	localparam HFRONTPORCH = 40;                       // horizontal front porch
+	localparam HSYNC       = 128;                       // horizontal sync pulse
 	localparam HSYNCSTART  = HACTIVE + HFRONTPORCH;                 // horizontal sync start
 	localparam HSYNCEND    = HACTIVE + HFRONTPORCH + HSYNC - 1;        // horizontal sync end
 	localparam LINEEND     = HACTIVE + HBACKPORCH + HFRONTPORCH + HSYNC - 1;   // horizontal line end
-	reg [9:0] H_SCAN;                                  // horizontal line position
+	reg [10:0] H_SCAN;                                  // horizontal line position
 	
 	// VGA 640x480 Vertical timing (frame)
-	localparam VACTIVE     = 480;                      // vertical visible area
-	localparam VBACKPORCH  = 33;                       // vertical back porch
-	localparam VFRONTPORCH = 10;                       // vertical front porch
-	localparam VSYNC       = 2;                        // vertical sync pulse
+	localparam VACTIVE     = 600;                      // vertical visible area
+	localparam VBACKPORCH  = 23;                       // vertical back porch
+	localparam VFRONTPORCH = 1;                       // vertical front porch
+	localparam VSYNC       = 4;                        // vertical sync pulse
     localparam VSYNCSTART  = VACTIVE + VBACKPORCH;                 // vertical sync start
 	localparam VSYNCEND    = VACTIVE + VBACKPORCH + VSYNC - 1;         // vertical sync end
 	localparam SCREENEND   = VACTIVE + VFRONTPORCH + VBACKPORCH + VSYNC - 1;    // vertical screen end
-	reg [9:0] V_SCAN;                                  // vertical screen position
+	reg [10:0] V_SCAN;                                  // vertical screen position
 	
     // set sync signals to low (active) or high (inactive)
     assign o_hsync = H_SCAN >= HSYNCSTART && H_SCAN <= HSYNCEND;
@@ -52,7 +52,7 @@ module vga640x480(
     reg [15:0] counter1;
     always @(posedge i_clk)
         // divide 100MHz by 4 = 25MHz : (2^16)/4 = 16384 decimal or 4000 hex
-	    {pix_clk, counter1} <= counter1 + 16'h4000;
+	    {pix_clk, counter1} <= counter1 + 16'h6666;
 	    
 	// check for reset / create frame loop
     always @(posedge i_clk)
