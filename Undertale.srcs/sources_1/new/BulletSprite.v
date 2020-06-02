@@ -6,7 +6,7 @@
 `timescale 1ns / 1ps
 
 // Setup AlienSprites Module
-module BullerSprite(
+module BulletSprite(
     input wire [9:0] xx,            // current x position
     input wire [9:0] yy,            // current y position
     input wire aactive,             // high during active pixel drawing

@@ -26,7 +26,7 @@ module Top(
     wire [9:0] y;           // pixel y position: 10-bit value: 0-1023 : only need 525
     wire active;            // high during active pixel drawing
     wire PixCLK;            // 25MHz pixel clock
-    vga640x480 display (.i_clk(CLK),.i_rst(rst),.o_hsync(HSYNC), 
+    vga800x600 display (.i_clk(CLK),.i_rst(rst),.o_hsync(HSYNC), 
                         .o_vsync(VSYNC),.o_x(x),.o_y(y),.o_active(active),
                         .pix_clk(PixCLK));
       
