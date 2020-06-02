@@ -12,7 +12,7 @@ module BulletRom(
     output reg [7:0] o_A1data // (7:0) 8 bit pixel value from Alien1.mem
     );
 
-    (*ROM_STYLE="block"*) reg [7:0] A1memory_array [0:805]; // 8 bit values for 806 pixels of Alien1 (31 x 26)
+    (*ROM_STYLE="block"*) reg [7:0] A1memory_array [0:143]; // 8 bit values for 806 pixels of Alien1 (31 x 26)
 
     initial begin
             $readmemh("bullet.mem", A1memory_array);

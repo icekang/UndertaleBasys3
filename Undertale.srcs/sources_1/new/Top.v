@@ -44,10 +44,10 @@ module Top(
                           .BBSpriteOn(BBSpriteOn),.dataout(BBout),
                           .Pclk(PixCLK));
     // instantiate BulletBoxSprite code
-    wire BBSpriteOn;       // 1=on, 0=off
+    wire BulletSpriteOn;       // 1=on, 0=off
     wire [7:0] B1out;        // pixel value from Bee.mem
     BulletSprite BulletDisplay (.xx(x),.yy(y),.aactive(active),
-                          .BBSpriteOn(BBSpriteOn),.dataout(B1out),
+                          .BSpriteOn(BulletSpriteOn),.Bdataout(B1out),
                           .Pclk(PixCLK));
     // load colour palette
     reg [7:0] palette [0:191];  // 8 bit values from the 192 hex entries in the colour palette
@@ -73,6 +73,13 @@ module Top(
                         RED <= (palette[(BBout*3)])>>4;          // RED bits(7:4) from colour palette
                         GREEN <= (palette[(BBout*3)+1])>>4;      // GREEN bits(7:4) from colour palette
                         BLUE <= (palette[(BBout*3)+2])>>4;       // BLUE bits(7:4) from colour palette
+                    end
+                else
+                if (BulletSpriteOn==1)
+                    begin
+                        RED <= (palette[(B1out*3)])>>4;          // RED bits(7:4) from colour palette
+                        GREEN <= (palette[(B1out*3)+1])>>4;      // GREEN bits(7:4) from colour palette
+                        BLUE <= (palette[(B1out*3)+2])>>4;       // BLUE bits(7:4) from colour palette
                     end
                 else
                     begin
