@@ -1,3 +1,9 @@
 vivado.jou
 vivado.log
 vivado_pid*.str
+./Undertale.cache
+./Undertale.hw
+./Undertale.ip_user_files
+./Undertale.runs
+./Undertale.sim
+vivado*
