@@ -17,7 +17,7 @@ module BulletBoxSprite(
 
     // setup character positions and sizes
     reg [9:0] BulletBoxX = 275; // Bee X start position
-    reg [8:0] BulletBoxY = 175; // Bee Y start position
+    reg [8:0] BulletBoxY = 275; // Bee Y start position
     localparam BulletBoxWidth = 250; // Bee width in pixels
     localparam BulletBoxHeight = 250; // Bee height in pixels
     localparam BulletBoxThick = 10; // Bee height in pixels

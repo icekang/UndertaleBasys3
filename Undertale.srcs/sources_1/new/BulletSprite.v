@@ -17,13 +17,16 @@ module BulletSprite(
 
     // instantiate Alien1Rom code
     reg [9:0] Baddress;            // 2^10 or 1024, need 31 x 26 = 806
-    BulletRom BulletVRom (.i_A1addr(Baddress),.i_clk2(Pclk),.o_A1data(A1dataout));
+    BulletRom BulletVRom (.i_A1addr(Baddress),.i_clk2(Pclk),.o_A1data(Bdataout));
 
     // setup character positions and sizes
-    reg [9:0] BX = 135;            // Alien1 X start position
-    reg [9:0] BY = 85;             // Alien1 Y start position
+    localparam BXstart = 50;
+    localparam BYstart = 275;
+    reg [9:0] BX = BXstart;            // Alien1 X start position
+    reg [9:0] BY = BYstart;             // Alien1 Y start position
     localparam BWidth = 12;        // Alien1 width in pixels
     localparam BHeight = 12;       // Alien1 height in pixels
+    localparam BOffset = 55;
 
     reg [9:0] BoX = 0;              // Offset for X Position of next Alien in row
     reg [9:0] BoY = 0;              // Offset for Y Position of next row of Aliens
@@ -33,6 +36,9 @@ module BulletSprite(
     reg [1:0] Bdir = 1;             // direction of aliens: 0=right, 1=left
     reg [9:0] delaliens=0;          // counter to slow alien movement
 
+    reg [9:0] BYvel = 0;
+    reg [9:0] BYacc = 1;
+    reg [3:0] BYAccDel = 0;
     always @ (posedge Pclk)
     begin
         if (aactive)
@@ -53,11 +59,11 @@ module BulletSprite(
                         if (BcounterW==BWidth-1)
                             begin
                                 BcounterW <= 0;
-                                BoX <= BoX + 40;
-                                if(BoX<(BcolCount-1)*40)
+                                BoX <= BoX + BOffset;
+                                if(BoX<(BcolCount-1)*BOffset)
 								    Baddress <= Baddress - (BWidth-1);
 							    else
-							    if(BoX==(BcolCount-1)*40)
+							    if(BoX==(BcolCount-1)*BOffset)
 								    BoX<=0;
 					        end
                     end
@@ -70,7 +76,7 @@ module BulletSprite(
     always @ (posedge Pclk)
     begin
         // slow down the alien movement / move aliens left or right
-        if (xx==639 && yy==479)
+        if (xx==800 && yy==600)
             begin
                 delaliens<=delaliens+1;
                 if (delaliens>1)
@@ -78,15 +84,30 @@ module BulletSprite(
                         delaliens<=0;
                         if (Bdir==1)
                             begin
-                                BX<=BX-1;
-                                if (BX<3)
-                                    Bdir<=0;
+                                BX<=BX+BYvel;
+                                BY<=BY+BYvel;
+                                BYAccDel<=BYAccDel+1;
+                                if (BYAccDel == 0)
+                                    BYvel=BYvel+BYacc;
+                                if (BY>525)
+                                    begin
+                                        Bdir<=0;
+                                        BYvel<=0;
+                                    end
                             end
                         if (Bdir==0)
                             begin
-                                BX<=BX+1;
-                                if (BX+BWidth+((BcolCount-1)*40)>636)    
-                                    Bdir<=1;
+                                BX<=BX-BYvel;
+                                BY<=BY-BYvel;
+                                BYAccDel<=BYAccDel+1;
+                                if (BYAccDel == 0)
+                                    BYvel=BYvel+BYacc;
+                                BYvel=BYvel+BYacc;
+                                if (BX<BXstart || BY<150)
+                                    begin    
+                                        Bdir<=1;
+                                        BYvel<=0;
+                                    end
                             end
                     end
             end
