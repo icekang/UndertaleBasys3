@@ -21,6 +21,7 @@ module Top(
     input btnD
     );
     
+    reg [3:0] state = 1;
     wire rst = 0;       // Setup Reset button
 
     // instantiate vga640x480 code
@@ -31,84 +32,32 @@ module Top(
     vga800x600 display (.i_clk(CLK),.i_rst(rst),.o_hsync(HSYNC), 
                         .o_vsync(VSYNC),.o_x(x),.o_y(y),.o_active(active),
                         .pix_clk(PixCLK));
-      
-    // instantiate BeeSprite code
-    wire BeeSpriteOn;       // 1=on, 0=off
-    wire [7:0] dout;        // pixel value from Bee.mem
-    BeeSprite BeeDisplay (.xx(x),.yy(y),.aactive(active),
-                          .BSpriteOn(BeeSpriteOn),.dataout(dout),
-                          .BR(btnR),.BL(btnL),.BU(btnU),.BD(btnD),
-                          .Pclk(PixCLK),.clk(CLK),.Kclk(PS2Clk),.Kdata(PS2Data));
-    // instantiate BulletBoxSprite code
-    wire BBSpriteOn;       // 1=on, 0=off
-    wire [7:0] BBout;        // pixel value from Bee.mem
-    BulletBoxSprite BBSprite (.xx(x),.yy(y),.aactive(active),
-                          .BBSpriteOn(BBSpriteOn),.dataout(BBout),
-                          .Pclk(PixCLK));
-    // instantiate BulletBoxSprite code
-    wire BulletSpriteOn;       // 1=on, 0=off
-    wire [7:0] B1out;        // pixel value from Bee.mem
-
-    BulletSprite BulletDisplay (.xx(x),.yy(y),.aactive(active),
-                          .BSpriteOn(BulletSpriteOn),.Bdataout(B1out),
-                          .Pclk(PixCLK));
-    // instantiate BulletBoxSprite code
-    wire NokauanSpriteOn;       // 1=on, 0=off
-    wire [7:0] Nokout;        // pixel value from Bee.mem
-    NokauanSprite NokauanDisplay (.xx(x),.yy(y),.aactive(active),
-                          .SpriteOn(NokauanSpriteOn),.dataout(Nokout),
-                          .Pclk(PixCLK));
-    // load colour palette
-    reg [7:0] palette [0:191];  // 8 bit values from the 192 hex entries in the colour palette
-    reg [7:0] COL = 0;          // background colour palette value
-    initial begin
-        $readmemh("palall.mem", palette); // load 192 hex values into "palette"
-    end
-
+                        
+    wire [3:0] bulletRED;
+    wire [3:0] bulletGREEN;
+    wire [3:0] bulletBLUE;
+    BulletScene bulletScene (.ix(x), .iy(y), .iactive(active),
+        .ibtnL(btnL), .ibtnR(btnR), .ibtnU(btnU), .ibtnD(btnD),
+        .iPixCLK(PixCLK), .iCLK(CLK), .iPS2Clk(PS2Clk), .iPS2Data(PS2Data),
+        .oRED(bulletRED), .oGREEN(bulletGREEN), .oBLUE(bulletBLUE));
+        
+    
     // draw on the active area of the screen
     always @ (posedge PixCLK)
     begin
-        if (active)
-            begin
-                if (BeeSpriteOn==1)
-                    begin
-                        RED <= (palette[(dout*3)])>>4;          // RED bits(7:4) from colour palette
-                        GREEN <= (palette[(dout*3)+1])>>4;      // GREEN bits(7:4) from colour palette
-                        BLUE <= (palette[(dout*3)+2])>>4;       // BLUE bits(7:4) from colour palette
-                    end
-                else
-                if (BBSpriteOn==1)
-                    begin
-                        RED <= (palette[(BBout*3)])>>4;          // RED bits(7:4) from colour palette
-                        GREEN <= (palette[(BBout*3)+1])>>4;      // GREEN bits(7:4) from colour palette
-                        BLUE <= (palette[(BBout*3)+2])>>4;       // BLUE bits(7:4) from colour palette
-                    end
-                else
-                if (BulletSpriteOn==1)
-                    begin
-                        RED <= (palette[(B1out*3)])>>4;          // RED bits(7:4) from colour palette
-                        GREEN <= (palette[(B1out*3)+1])>>4;      // GREEN bits(7:4) from colour palette
-                        BLUE <= (palette[(B1out*3)+2])>>4;       // BLUE bits(7:4) from colour palette
-                    end
-                else
-                if (NokauanSpriteOn==1)
-                    begin
-                        RED <= (palette[(Nokout*3)])>>4;          // RED bits(7:4) from colour palette
-                        GREEN <= (palette[(Nokout*3)+1])>>4;      // GREEN bits(7:4) from colour palette
-                        BLUE <= (palette[(Nokout*3)+2])>>4;       // BLUE bits(7:4) from colour palette
-                    end
-                else
-                    begin
-                        RED <= 0;   // set RED, GREEN & BLUE
-                        GREEN <= 0; // to "0" when x,y outside of
-                        BLUE <= 0;  // the active display area
-                    end
-            end
-        else
+        case(state)
+            1: 
                 begin
-                    RED <= 0;   // set RED, GREEN & BLUE
-                    GREEN <= 0; // to "0" when x,y outside of
-                    BLUE <= 0;  // the active display area
+                    RED <= bulletRED;
+                    GREEN <= bulletGREEN;
+                    BLUE <= bulletBLUE;
                 end
+            default:
+                begin
+                    RED <= 0;
+                    GREEN <= 0;
+                    BLUE <= 0;
+                end
+        endcase
     end
 endmodule
