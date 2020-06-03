@@ -67,32 +67,42 @@ module BeeSprite(
     reg [8:0] BeeY = 433; // Bee Y start position
     localparam BeeWidth = 25; // Bee width in pixels
     localparam BeeHeight = 23; // Bee height in pixels
-  
+    reg ups,downs,lefts,rights;
+    
     always @ (posedge Pclk)
     begin
+        if (keycode[15:8] == 8'hf0) begin //release button
+            if (keycode[7:0] == 8'h1d) begin ups=0; end
+            else if (keycode[7:0] == 8'h1b) begin downs=0; end
+            else if (keycode[7:0] == 8'h1c) begin lefts=0; end
+            else if (keycode[7:0] == 8'h23) begin rights=0; end
+        end
+        else begin //press button
+            if (keycode[7:0] == 8'h1d) begin ups=1; end 
+            else if (keycode[7:0] == 8'h1b) begin downs=1; end
+            else if (keycode[7:0] == 8'h1c) begin lefts=1; end
+            else if (keycode[7:0] == 8'h23) begin rights=1; end
+        end
         if (xx==799 && yy==599)
             begin // check for left or right button pressed
                 if (BR == 1 && BeeX<800-BeeWidth)
-                    BeeX<=BeeX+1;
+                    BeeX<=BeeX+2;
                 if (BL == 1 && BeeX>1)
-                    BeeX<=BeeX-1;
+                    BeeX<=BeeX-2;
                 
                 if (BD == 1 && BeeY<600-BeeHeight)
-                    BeeY<=BeeY+1;
+                    BeeY<=BeeY+2;
                 if (BU == 1 && BeeY>1)
-                    BeeY<=BeeY-1;
-                    
-                if (keycodev[7:0] == 8'h23 && BeeX<800-BeeWidth)
-                    BeeX<=BeeX+1;
-                if (keycodev[7:0] == 8'h1c && BeeX>1)
-                    BeeX<=BeeX-1;
-                    
-                if (keycodev[7:0] == 8'h1b && BeeY<600-BeeHeight)
-                  BeeY<=BeeY+1;
-                if (keycodev[7:0] == 8'h1d && BeeY>1)
-                  BeeY<=BeeY-1;
-                  
-                keycodev<= 16'h0000;
+                    BeeY<=BeeY-2;
+                 
+                if (rights && BeeX<800-BeeWidth)
+                    BeeX<=BeeX+2;
+                if (lefts && BeeX>1)
+                    BeeX<=BeeX-2;
+                if (downs && BeeY<600-BeeHeight)
+                  BeeY<=BeeY+2;
+                if (ups && BeeY>1)
+                  BeeY<=BeeY-2;
             end    
         if (aactive)
             begin // check if xx,yy are within the confines of the Bee character

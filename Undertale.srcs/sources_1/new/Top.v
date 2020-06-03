@@ -21,7 +21,7 @@ module Top(
     input btnD
     );
     
-    wire rst = btnC;       // Setup Reset button
+    wire rst = 0;       // Setup Reset button
 
     // instantiate vga640x480 code
     wire [9:0] x;           // pixel x position: 10-bit value: 0-1023 : only need 800
