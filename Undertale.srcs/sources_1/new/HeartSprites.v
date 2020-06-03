@@ -57,8 +57,11 @@ module BeeSprite(
         if (flag == 1'b1 && cn == 1'b1) begin
             start <= 1'b1;
             keycodev <= keycode;
-        end else
+        end else begin
+            keycodev <= 16'h0000;
             start <= 1'b0;
+         end
+            
             
     // setup character positions and sizes
     reg [9:0] BeeX = 297; // Bee X start position
@@ -68,22 +71,27 @@ module BeeSprite(
   
     always @ (posedge Pclk)
     begin
-        if (xx==639 && yy==479)
+        if (xx==799 && yy==599)
             begin // check for left or right button pressed
-                if (BR == 1 && BeeX<640-BeeWidth)
+                if (BR == 1 && BeeX<800-BeeWidth)
                     BeeX<=BeeX+1;
                 if (BL == 1 && BeeX>1)
                     BeeX<=BeeX-1;
                 
-                if (BD == 1 && BeeY<480-BeeHeight)
+                if (BD == 1 && BeeY<600-BeeHeight)
                     BeeY<=BeeY+1;
                 if (BU == 1 && BeeY>1)
                     BeeY<=BeeY-1;
                     
-                 if (keycodev[7:0] == 8'h1d && BeeY<480-BeeHeight)
-                    BeeY<=BeeY+1;
-                 if (keycodev[7:0] == 8'h1b && BeeY>1)
-                    BeeY<=BeeY-1;
+                if (keycodev[7:0] == 8'h23 && BeeX<800-BeeWidth)
+                    BeeX<=BeeX+1;
+                if (keycodev[7:0] == 8'h1c && BeeX>1)
+                    BeeX<=BeeX-1;
+                    
+                if (keycodev[7:0] == 8'h1b && BeeY<600-BeeHeight)
+                  BeeY<=BeeY+1;
+                if (keycodev[7:0] == 8'h1d && BeeY>1)
+                  BeeY<=BeeY-1;
             end    
         if (aactive)
             begin // check if xx,yy are within the confines of the Bee character
