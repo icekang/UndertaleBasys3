@@ -24,7 +24,7 @@ module KBinput(
     input clk,
     input kclk,
     input kdata,
-    output reg [7:0] dataOut,
+    output reg [15:0] dataOut,
     output reg oflag
     );
     
@@ -33,16 +33,9 @@ module KBinput(
     reg [7:0]dataprev=0;
     reg [3:0]cnt=0;
     reg flag=0;
-    reg pflag=0;
+    reg pflag;
     reg CLK50MHZ=0;
-    initial
-        begin
-            cnt<=4'h1;
-            flag<=1'b0;
-            datacur<=8'hf0;
-            dataprev<=8'hf0;
-            dataOut<=8'hf0;
-        end 
+    
         
     always @(posedge(clk))begin
         CLK50MHZ<=~CLK50MHZ;
@@ -85,16 +78,14 @@ module KBinput(
         else if(cnt==10) cnt<=0;
     end
     
-    
-    always@(posedge flag) begin
-        dataOut <= datacur;
-        /*if (flag == 1'b1 && pflag == 1'b0) begin
-            dataOut <= datacur;
-            oflag <= 1'b1;
-            dataprev <= datacur;
-        end else
-            oflag <= 'b0;
-        pflag <= flag;*/
+    always@(posedge CLK50MHZ) begin
+        if (flag == 1'b1 && pflag == 1'b0) begin
+        dataOut <= {dataprev, datacur};
+        oflag <= 1'b1;
+        dataprev <= datacur;
+    end else
+        oflag <= 'b0;
+        pflag <= flag;
     end
     
     
