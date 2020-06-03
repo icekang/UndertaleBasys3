@@ -58,7 +58,6 @@ module BeeSprite(
             start <= 1'b1;
             keycodev <= keycode;
         end else begin
-            keycodev <= 16'h0000;
             start <= 1'b0;
          end
             
@@ -92,6 +91,8 @@ module BeeSprite(
                   BeeY<=BeeY+1;
                 if (keycodev[7:0] == 8'h1d && BeeY>1)
                   BeeY<=BeeY-1;
+                  
+                keycodev<= 16'h0000;
             end    
         if (aactive)
             begin // check if xx,yy are within the confines of the Bee character
