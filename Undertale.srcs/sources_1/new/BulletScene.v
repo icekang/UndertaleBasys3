@@ -1,8 +1,8 @@
 `timescale 1ns / 1ps
 
 module BulletScene(
-input wire ix,
-input wire iy,
+input wire [9:0] ix,
+input wire [9:0] iy,
 input wire iactive,
 input wire ibtnR,
 input wire ibtnL,
@@ -12,20 +12,6 @@ input wire iPixCLK,
 input wire iCLK,
 input wire iPS2Clk,
 input wire iPS2Data,
-
-//input wire [7:0] palette [0:191],
-
-//output wire BeeSpriteOn,
-//output wire [7:0] dout,
-
-//output wire BBSpriteOn,
-//output wire [7:0] BBout,
-
-//output wire BulletSpriteOn,       // 1=on, 0=off
-//output wire [7:0] B1out,
-
-//output wire NokauanSpriteOn,       // 1=on, 0=off
-//output wire [7:0] Nokout,        // pixel value from Bee.mem
 
 output reg [3:0] oRED,
 output reg [3:0] oGREEN,
