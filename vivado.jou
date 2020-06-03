@@ -2,46 +2,14 @@
 # Vivado v2018.3 (64-bit)
 # SW Build 2405991 on Thu Dec  6 23:38:27 MST 2018
 # IP Build 2404404 on Fri Dec  7 01:43:56 MST 2018
-# Start of session at: Wed Jun  3 03:53:07 2020
-# Process ID: 16604
+# Start of session at: Wed Jun  3 21:38:16 2020
+# Process ID: 1088
 # Current directory: D:/HWLab/UndertaleBasys3/UndertaleBasys3
-# Command line: vivado.exe -gui_launcher_event rodinguilauncherevent4548 D:\HWLab\UndertaleBasys3\UndertaleBasys3\Undertale.xpr
+# Command line: vivado.exe -gui_launcher_event rodinguilauncherevent14860 D:\HWLab\UndertaleBasys3\UndertaleBasys3\Undertale.xpr
 # Log file: D:/HWLab/UndertaleBasys3/UndertaleBasys3/vivado.log
 # Journal file: D:/HWLab/UndertaleBasys3/UndertaleBasys3\vivado.jou
 #-----------------------------------------------------------
 start_gui
 open_project D:/HWLab/UndertaleBasys3/UndertaleBasys3/Undertale.xpr
 update_compile_order -fileset sources_1
-add_files -norecurse {D:/HWLab/UndertaleBasys3/UndertaleBasys3/Undertale.srcs/sources_1/new/NokauanSprite.v D:/HWLab/UndertaleBasys3/UndertaleBasys3/Undertale.srcs/sources_1/new/BulletSprite.v}
 update_compile_order -fileset sources_1
-add_files {D:/HWLab/UndertaleBasys3/UndertaleBasys3/Undertale.srcs/sources_1/new/NokauanSprite.v D:/HWLab/UndertaleBasys3/UndertaleBasys3/Undertale.srcs/sources_1/new/bin2ascii.v D:/HWLab/UndertaleBasys3/UndertaleBasys3/Undertale.srcs/sources_1/new/NokauanRom.v D:/HWLab/UndertaleBasys3/UndertaleBasys3/Undertale.srcs/sources_1/new/BulletSprite.v D:/HWLab/UndertaleBasys3/UndertaleBasys3/Undertale.srcs/sources_1/new/HeartRom.v D:/HWLab/UndertaleBasys3/UndertaleBasys3/Undertale.srcs/sources_1/new/BulletRom.v D:/HWLab/UndertaleBasys3/UndertaleBasys3/Undertale.srcs/sources_1/new/vga800x600.v D:/HWLab/UndertaleBasys3/UndertaleBasys3/Undertale.srcs/sources_1/new/Top.v D:/HWLab/UndertaleBasys3/UndertaleBasys3/Undertale.srcs/sources_1/new/BulletBoxSprite.v D:/HWLab/UndertaleBasys3/UndertaleBasys3/Undertale.srcs/sources_1/new/debouncer.v D:/HWLab/UndertaleBasys3/UndertaleBasys3/Undertale.srcs/sources_1/new/KBinput.v D:/HWLab/UndertaleBasys3/UndertaleBasys3/Undertale.srcs/sources_1/new/HeartSprites.v}
-update_compile_order -fileset sources_1
-reset_run synth_1
-launch_runs impl_1 -to_step write_bitstream
-wait_on_run impl_1
-open_hw
-connect_hw_server
-open_hw_target
-set_property PROGRAM.FILE {D:/HWLab/UndertaleBasys3/UndertaleBasys3/Undertale.runs/impl_1/Top.bit} [get_hw_devices xc7a35t_0]
-current_hw_device [get_hw_devices xc7a35t_0]
-refresh_hw_device -update_hw_probes false [lindex [get_hw_devices xc7a35t_0] 0]
-set_property PROBES.FILE {} [get_hw_devices xc7a35t_0]
-set_property FULL_PROBES.FILE {} [get_hw_devices xc7a35t_0]
-set_property PROGRAM.FILE {D:/HWLab/UndertaleBasys3/UndertaleBasys3/Undertale.runs/impl_1/Top.bit} [get_hw_devices xc7a35t_0]
-program_hw_devices [get_hw_devices xc7a35t_0]
-refresh_hw_device [lindex [get_hw_devices xc7a35t_0] 0]
-close_hw
-reset_run synth_1
-launch_runs impl_1 -to_step write_bitstream
-wait_on_run impl_1
-open_hw
-connect_hw_server
-open_hw_target
-set_property PROGRAM.FILE {D:/HWLab/UndertaleBasys3/UndertaleBasys3/Undertale.runs/impl_1/Top.bit} [get_hw_devices xc7a35t_0]
-current_hw_device [get_hw_devices xc7a35t_0]
-refresh_hw_device -update_hw_probes false [lindex [get_hw_devices xc7a35t_0] 0]
-set_property PROBES.FILE {} [get_hw_devices xc7a35t_0]
-set_property FULL_PROBES.FILE {} [get_hw_devices xc7a35t_0]
-set_property PROGRAM.FILE {D:/HWLab/UndertaleBasys3/UndertaleBasys3/Undertale.runs/impl_1/Top.bit} [get_hw_devices xc7a35t_0]
-program_hw_devices [get_hw_devices xc7a35t_0]
-refresh_hw_device [lindex [get_hw_devices xc7a35t_0] 0]

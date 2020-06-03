@@ -39,7 +39,7 @@ set_property -dict {PACKAGE_PIN P19 IOSTANDARD LVCMOS33} [get_ports {HSYNC}];
 set_property -dict {PACKAGE_PIN R19 IOSTANDARD LVCMOS33} [get_ports {VSYNC}];
 
 ## Configuration options, can be used for all designs
-set_property CONFIG_VOLTAGE 5 [current_design]
+set_property CONFIG_VOLTAGE 3.3 [current_design]
 set_property CFGBVS VCCO [current_design]
 
 ##USB HID (PS/2)
