@@ -21,7 +21,7 @@ module Top(
     input btnD
     );
     
-    reg [3:0] state = 1;
+    reg [3:0] state = 2;
     wire rst = 0;       // Setup Reset button
 
     // instantiate vga640x480 code
@@ -41,22 +41,58 @@ module Top(
         .iPixCLK(PixCLK), .iCLK(CLK), .iPS2Clk(PS2Clk), .iPS2Data(PS2Data),
         .oRED(bulletRED), .oGREEN(bulletGREEN), .oBLUE(bulletBLUE));
         
+    wire [3:0] titleRED;
+    wire [3:0] titleGREEN;
+    wire [3:0] titleBLUE;
+    wire [3:0] nextState;
+//    TitleScene titleScene (.ix(x), .iy(y), .iactive(active),
+//        .ibtnC(btnC),
+//        .iPixCLK(PixCLK), .iCLK(CLK), .iPS2Clk(PS2Clk), .iPS2Data(PS2Data),
+//        .oRED(titleRED), .oGREEN(titleGREEN), .oBLUE(titleBLUE),
+//        .nextState(nextState));
+    
+    wire [3:0] barRED;
+    wire [3:0] barGREEN;
+    wire [3:0] barBLUE;
+    wire [10:0] nextHealth;
+    wire isEnding;
+    BarScene barScene (.xx(x), .yy(y), .aactive(active),
+    .Pclk(PixCLK),
+    .Reset(0), .ibtnX(btnC),
+    .oRED(barRED), .oGREEN(barGREEN), .oBLUE(barBLUE),
+    .isEnding(isEnding),
+    .health(10),
+    .nextHealth(nextHealth)
+    );
     
     // draw on the active area of the screen
     always @ (posedge PixCLK)
     begin
         case(state)
+            0: 
+                begin
+                    RED <= titleRED;
+                    GREEN <= titleGREEN;
+                    BLUE <= titleBLUE;
+                    state <= nextState;
+                end
             1: 
                 begin
                     RED <= bulletRED;
                     GREEN <= bulletGREEN;
                     BLUE <= bulletBLUE;
                 end
+            2: 
+                begin
+                    RED <= barRED;
+                    GREEN <= barGREEN;
+                    BLUE <= barBLUE;
+                end
             default:
                 begin
-                    RED <= 0;
-                    GREEN <= 0;
-                    BLUE <= 0;
+                    RED <= 1;
+                    GREEN <= 1;
+                    BLUE <= 1;
                 end
         endcase
     end
