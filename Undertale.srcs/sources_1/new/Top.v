@@ -32,27 +32,64 @@ module Top(
     vga800x600 display (.i_clk(CLK),.i_rst(rst),.o_hsync(HSYNC), 
                         .o_vsync(VSYNC),.o_x(x),.o_y(y),.o_active(active),
                         .pix_clk(PixCLK));
+    integer hp_main = 100;
+    wire hp_main_temp = 100;
+    integer hp_main_check;
+    integer hp_mon1 = 80;
+    integer hp_mon1_check ;
+    integer hp_mon2 = 100;
+    integer hp_mon2_prev = 100;
+    integer hp_mon2_check ;
+    integer hp_mon3 = 50;
+    integer hp_mon3_check;
                         
     wire [3:0] bulletRED;
     wire [3:0] bulletGREEN;
     wire [3:0] bulletBLUE;
     BulletScene bulletScene (.ix(x), .iy(y), .iactive(active),
         .ibtnL(btnL), .ibtnR(btnR), .ibtnU(btnU), .ibtnD(btnD),
-        .iPixCLK(PixCLK), .iCLK(CLK), .iPS2Clk(PS2Clk), .iPS2Data(PS2Data),
-        .oRED(bulletRED), .oGREEN(bulletGREEN), .oBLUE(bulletBLUE));
-        
-    assign h_main = ((x > 20) & (y >  40) & (x < 220) & (y < 70)) ? 1 : 0;
+        .iPixCLK(PixCLK), .iCLK(CLK), .iPS2Clk(PS2Clk), .iPS2Data(PS2Data), .hp(hp_main),
+        .oRED(bulletRED), .oGREEN(bulletGREEN), .oBLUE(bulletBLUE), .hpO(hp_main_temp));
+    
+    wire h_main, h_mon1,  h_mon2, h_mon3, h_main_box, h_mon2_box, h_mon3_box, h_mon1_box;
     assign h_main_box = (((y > 40) &(y < 70)) & ((x > 15) & (x <= 20) | ((x >= 220) & (x < 225)))) | ((x>20 & x < 220) & ((y<=40 & y>35) | (y >= 70 & y < 75) ) ) ? 1:0;
-    assign h_mon1 = ((x > 580) & (y >  40) & (x < 780) & (y < 70)) ? 1 : 0;
     assign h_mon1_box = (((y > 40) &(y < 70)) & ((x > 575) & (x <= 580) | ((x >= 780) & (x < 785)))) | ((x > 580 & x < 780) & ((y<=40 & y>35) | (y >= 70 & y < 75) ) ) ? 1:0;
-    assign h_mon2 = ((x > 580) & (y >  90) & (x < 780) & (y < 120)) ? 1 : 0;
     assign h_mon2_box = (((y > 90) &(y < 120)) & ((x > 575) & (x <= 580) | ((x >= 780) & (x < 785)))) | ((x > 580 & x < 780) & ((y<=90 & y>85) | (y >= 120 & y < 125) ) ) ? 1:0;
-    assign h_mon3 = ((x > 580) & (y >  140) & (x < 780) & (y < 170)) ? 1 : 0;
     assign h_mon3_box = (((y > 140) &(y < 170)) & ((x > 575) & (x <= 580) | ((x >= 780) & (x < 785)))) | ((x > 580 & x < 780) & ((y<=140 & y>135) | (y >= 170 & y < 175) ) ) ? 1:0;
         
+    assign h_main = ((x > 20) & (y >  40) & (x < hp_main_check) & (y < 70)) ? 1 : 0;
+    assign h_mon1 = ((x > 580) & (y >  40) & (x < hp_mon1_check ) & (y < 70)) ? 1 : 0;
+    assign h_mon2 = ((x > 580) & (y >  90) & (x < hp_mon2_check) & (y < 120)) ? 1 : 0;
+    assign h_mon3 = ((x > 580) & (y >  140) & (x < hp_mon3_check) & (y < 170)) ? 1 : 0;       
+    
+    integer ms_count = 0;
+    reg sec_pulse; 
     // draw on the active area of the screen
     always @ (posedge PixCLK)
     begin
+        sec_pulse <= 0;
+        if (ms_count == 99999999)
+            begin
+                ms_count <= 0;
+                sec_pulse <= 1;
+                hp_mon2 <= hp_mon2 - 1; 
+                if(hp_mon2 < 0)
+                    hp_mon2 <= 0;
+                hp_mon2_prev <= hp_mon2;
+            end
+        else
+            ms_count <= ms_count+1;
+          
+        hp_main <= hp_main_temp;
+        if(hp_main < 0)
+            hp_main <= 0;
+        hp_main_check <= hp_main * 2 + 20;
+        hp_mon1_check <= hp_mon1 * 2 + 580;
+        hp_mon2_check <= hp_mon2 * 2 + 580;
+        hp_mon3_check <= hp_mon3 * 2 + 580;
+        
+        
+        
         case(state)
             1: 
                 begin
