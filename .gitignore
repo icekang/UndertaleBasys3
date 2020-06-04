@@ -9,3 +9,4 @@ Undertale.runs/
 Undertale.sim/
 vivado*
 !Undertale.runs/impl_1/Top.bit
+*.xpr

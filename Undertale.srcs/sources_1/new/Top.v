@@ -41,16 +41,24 @@ module Top(
         .iPixCLK(PixCLK), .iCLK(CLK), .iPS2Clk(PS2Clk), .iPS2Data(PS2Data),
         .oRED(bulletRED), .oGREEN(bulletGREEN), .oBLUE(bulletBLUE));
         
-    
+    assign h_main = ((x > 20) & (y >  40) & (x < 220) & (y < 70)) ? 1 : 0;
+    assign h_main_box = (((y > 40) &(y < 70)) & ((x > 15) & (x <= 20) | ((x >= 220) & (x < 225)))) | ((x>20 & x < 220) & ((y<=40 & y>35) | (y >= 70 & y < 75) ) ) ? 1:0;
+    assign h_mon1 = ((x > 580) & (y >  40) & (x < 780) & (y < 70)) ? 1 : 0;
+    assign h_mon1_box = (((y > 40) &(y < 70)) & ((x > 575) & (x <= 580) | ((x >= 780) & (x < 785)))) | ((x > 580 & x < 780) & ((y<=40 & y>35) | (y >= 70 & y < 75) ) ) ? 1:0;
+    assign h_mon2 = ((x > 580) & (y >  90) & (x < 780) & (y < 120)) ? 1 : 0;
+    assign h_mon2_box = (((y > 90) &(y < 120)) & ((x > 575) & (x <= 580) | ((x >= 780) & (x < 785)))) | ((x > 580 & x < 780) & ((y<=90 & y>85) | (y >= 120 & y < 125) ) ) ? 1:0;
+    assign h_mon3 = ((x > 580) & (y >  140) & (x < 780) & (y < 170)) ? 1 : 0;
+    assign h_mon3_box = (((y > 140) &(y < 170)) & ((x > 575) & (x <= 580) | ((x >= 780) & (x < 785)))) | ((x > 580 & x < 780) & ((y<=140 & y>135) | (y >= 170 & y < 175) ) ) ? 1:0;
+        
     // draw on the active area of the screen
     always @ (posedge PixCLK)
     begin
         case(state)
             1: 
                 begin
-                    RED <= bulletRED;
-                    GREEN <= bulletGREEN;
-                    BLUE <= bulletBLUE;
+                    RED <= bulletRED | {4{h_main}} | {4{h_main_box}} | {4{h_mon1_box}} | {4{h_mon2_box}} | {4{h_mon3_box}} ;
+                    GREEN <= bulletGREEN | {4{h_mon1}} | {4{h_mon2}} | {4{h_mon3}} | {4{h_main_box}} | {4{h_mon1_box}} | {4{h_mon2_box}} | {4{h_mon3_box}};
+                    BLUE <= bulletBLUE | {4{h_main_box}} | {4{h_mon1_box}} | {4{h_mon2_box}} | {4{h_mon3_box}} ;
                 end
             default:
                 begin
