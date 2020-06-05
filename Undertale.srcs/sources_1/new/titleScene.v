@@ -40,11 +40,17 @@ output reg [3:0] nextState
     initial begin
         $readmemh("palall.mem", palette); // load 192 hex values into "palette"
     end
+    reg de=1;
+    reg space;
 always @ (posedge iPixCLK)
     begin
-        if (keycode[7:0] == 8'h29 || ibtnC == 1)
+    //normal input
+        if (keycode[15:8] == 8'hf0) de=1;
+        else if (!de) begin space=0; end
+        else if (keycode[7:0] == 8'h29) begin space=1;de=0; end
+        if (space == 1 || ibtnC == 1)
             begin
-                nextState <= 2; //go to menu
+                nextState <= 3; //go to menu
             end
         else
             begin

@@ -66,6 +66,19 @@ module Top(
     .nextHealth(nextHealth)
     );
     
+    wire [3:0] menuRED;
+    wire [3:0] menuGREEN;
+    wire [3:0] menuBLUE;
+    wire [1:0] state3_nextState;
+    wire [1:0] noksel;
+    MenuScene menuScene (.ix(x), .iy(y), .iactive(active),
+        .ibtnC(btnC), .ibtnL(btnL), .ibtnR(btnR), .ibtnU(btnU), .ibtnD(btnD),
+        .iPixCLK(PixCLK), .iCLK(CLK), .iPS2Clk(PS2Clk), .iPS2Data(PS2Data),
+        .oRED(menuRED), .oGREEN(menuGREEN), .oBLUE(menuBLUE),
+        
+        .nextState(state3_nextState),.noksel(noksel)
+        );
+        
     // draw on the active area of the screen
     always @ (posedge PixCLK)
     begin
@@ -88,6 +101,14 @@ module Top(
                     RED <= barRED;
                     GREEN <= barGREEN;
                     BLUE <= barBLUE;
+                end
+            3: 
+                begin
+                    RED <= menuRED;
+                    GREEN <= menuGREEN;
+                    BLUE <= menuBLUE;
+                    state <= state3_nextState;
+                    
                 end
             default:
                 begin
