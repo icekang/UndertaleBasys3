@@ -11,12 +11,12 @@ module TitleRom(
     input wire i_clk2,
     output reg [7:0] o_data
     );
-
 //    (*ROM_STYLE="block"*) reg [7:0] memory_array [0:28854];
-    (*ROM_STYLE="block"*) reg [7:0] memory_array [0:436207];
+//    (*ROM_STYLE="block"*) reg [7:0] memory_array [0:436207];
+    (*ROM_STYLE="block"*) reg [7:0] memory_array [0:111375];
 
     initial begin
-            $readmemh("name-large.mem", memory_array);
+            $readmemh("namemedium.mem", memory_array);
     end
 
     always @ (posedge i_clk2)

@@ -15,10 +15,10 @@ module TitleSprite(
     TitleRom TitleVRom (.i_addr(address),.i_clk2(Pclk),.o_data(dataout));
     
     // setup character positions and sizes
-    reg [9:0] TitleX = 25; // Bee X start position
-    reg [8:0] TitleY = 25; // Bee Y start position
-    localparam TitleWidth = 796;//199; // Bee width in pixels
-    localparam TitleHeight = 548;//145; // Bee height in pixels
+    reg [9:0] TitleX = 198; // Bee X start position
+    reg [8:0] TitleY = 162; // Bee Y start position
+    localparam TitleWidth = 405;//796;//199; // Bee width in pixels
+    localparam TitleHeight = 275;//548;//145; // Bee height in pixels
     
 //    NokauanRom NokRom (.i_Nokaddr(address),.i_clk2(Pclk),.o_Nokdata(dataout));
 
@@ -28,22 +28,11 @@ module TitleSprite(
 //    localparam SpriteWidth = 176; // Sprite width in pixels
 //    localparam SpriteHeight = 161; // Sprite height in pixels
     
-    reg [1:0] nextState = 0;
    always @ (posedge Pclk)
     begin
         // EDIT nextState to 3 when Menu is ready 
         if (aactive)
             begin // check if xx,yy are within the confines of the Bee character
-//                if (xx==SpriteX-1 && yy==SpriteY)
-//                    begin
-//                        address <= 0;
-//                        SpriteOn <=1;
-//                    end
-//                if ((xx>SpriteX-1) && (xx<SpriteX+SpriteWidth) && (yy>SpriteY-1) && (yy<SpriteY+SpriteHeight))
-//                    begin
-//                        address <= address + 1;
-//                        SpriteOn <=1;
-//                    end
                 if (xx==TitleX-1 && yy==TitleY)
                     begin
                         address <= 0;

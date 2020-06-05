@@ -22,6 +22,7 @@ module Top(
     );
     
     reg [3:0] state = 0;
+    wire [3:0] nextState;
     wire rst = 0;       // Setup Reset button
 
     // instantiate vga640x480 code
@@ -44,12 +45,12 @@ module Top(
     wire [3:0] titleRED;
     wire [3:0] titleGREEN;
     wire [3:0] titleBLUE;
-    wire [3:0] nextState;
+    wire [3:0] state0_nextState;
     TitleScene titleScene (.ix(x), .iy(y), .iactive(active),
         .ibtnC(btnC),
         .iPixCLK(PixCLK), .iCLK(CLK), .iPS2Clk(PS2Clk), .iPS2Data(PS2Data),
         .oRED(titleRED), .oGREEN(titleGREEN), .oBLUE(titleBLUE),
-        .nextState(nextState));
+        .nextState(state0_nextState));
     
     wire [3:0] barRED;
     wire [3:0] barGREEN;
@@ -74,7 +75,7 @@ module Top(
                     RED <= titleRED;
                     GREEN <= titleGREEN;
                     BLUE <= titleBLUE;
-//                    state <= nextState;
+                    state <= state0_nextState;
                 end
             1: 
                 begin

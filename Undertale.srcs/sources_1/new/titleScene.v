@@ -42,11 +42,15 @@ output reg [3:0] nextState
     end
 always @ (posedge iPixCLK)
     begin
-//        if (keycode[7:0] == 8'h23)
-//            begin
-//                nextState=2;
-//            end
- 
+        if (keycode[7:0] == 8'h29 || ibtnC == 1)
+            begin
+                nextState <= 2; //go to menu
+            end
+        else
+            begin
+                nextState <= 0;
+            end
+
         if (iactive)
             begin
                 if (TitleSpriteOn==1)
