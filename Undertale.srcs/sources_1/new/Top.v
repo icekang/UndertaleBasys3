@@ -21,7 +21,8 @@ module Top(
     input btnD
     );
     
-    reg [3:0] state = 1;
+    reg [3:0] state = 0;
+    wire [3:0] nextState;
     wire rst = 0;       // Setup Reset button
 
     // instantiate vga640x480 code
@@ -61,6 +62,29 @@ module Top(
     assign h_mon1 = ((x > 580) & (y >  40) & (x < hp_mon1_check ) & (y < 70)) ? 1 : 0;
     assign h_mon2 = ((x > 580) & (y >  90) & (x < hp_mon2_check) & (y < 120)) ? 1 : 0;
     assign h_mon3 = ((x > 580) & (y >  140) & (x < hp_mon3_check) & (y < 170)) ? 1 : 0;       
+    wire [3:0] titleRED;
+    wire [3:0] titleGREEN;
+    wire [3:0] titleBLUE;
+    wire [3:0] state0_nextState;
+    TitleScene titleScene (.ix(x), .iy(y), .iactive(active),
+        .ibtnC(btnC),
+        .iPixCLK(PixCLK), .iCLK(CLK), .iPS2Clk(PS2Clk), .iPS2Data(PS2Data),
+        .oRED(titleRED), .oGREEN(titleGREEN), .oBLUE(titleBLUE),
+        .nextState(state0_nextState));
+    
+    wire [3:0] barRED;
+    wire [3:0] barGREEN;
+    wire [3:0] barBLUE;
+    wire [10:0] nextHealth;
+    wire isEnding;
+    BarScene barScene (.xx(x), .yy(y), .aactive(active),
+    .Pclk(PixCLK),
+    .Reset(0), .ibtnX(btnC),
+    .oRED(barRED), .oGREEN(barGREEN), .oBLUE(barBLUE),
+    .isEnding(isEnding),
+    .health(10),
+    .nextHealth(nextHealth)
+    );
     
     integer ms_count = 0;
     reg sec_pulse; 
@@ -91,17 +115,30 @@ module Top(
         
         
         case(state)
+            0: 
+                begin
+                    RED <= titleRED;
+                    GREEN <= titleGREEN;
+                    BLUE <= titleBLUE;
+                    state <= state0_nextState;
+                end
             1: 
                 begin
                     RED <= bulletRED | {4{h_main}} | {4{h_main_box}} | {4{h_mon1_box}} | {4{h_mon2_box}} | {4{h_mon3_box}} ;
                     GREEN <= bulletGREEN | {4{h_mon1}} | {4{h_mon2}} | {4{h_mon3}} | {4{h_main_box}} | {4{h_mon1_box}} | {4{h_mon2_box}} | {4{h_mon3_box}};
                     BLUE <= bulletBLUE | {4{h_main_box}} | {4{h_mon1_box}} | {4{h_mon2_box}} | {4{h_mon3_box}} ;
                 end
+            2: 
+                begin
+                    RED <= barRED;
+                    GREEN <= barGREEN;
+                    BLUE <= barBLUE;
+                end
             default:
                 begin
-                    RED <= 0;
-                    GREEN <= 0;
-                    BLUE <= 0;
+                    RED <= 1;
+                    GREEN <= 1;
+                    BLUE <= 1;
                 end
         endcase
     end
