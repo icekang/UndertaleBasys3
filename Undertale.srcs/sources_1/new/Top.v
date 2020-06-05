@@ -21,7 +21,7 @@ module Top(
     input btnD
     );
     
-    reg [3:0] state = 0;
+    reg [3:0] state = 1;
     wire [3:0] nextState;
     wire rst = 0;       // Setup Reset button
 
@@ -34,7 +34,7 @@ module Top(
                         .o_vsync(VSYNC),.o_x(x),.o_y(y),.o_active(active),
                         .pix_clk(PixCLK));
     integer hp_main = 100;
-    wire hp_main_temp = 100;
+    wire [6:0] hp_main_temp;
     integer hp_main_check;
     integer hp_mon1 = 80;
     integer hp_mon1_check ;
@@ -66,17 +66,18 @@ module Top(
     wire [3:0] titleGREEN;
     wire [3:0] titleBLUE;
     wire [3:0] state0_nextState;
-    TitleScene titleScene (.ix(x), .iy(y), .iactive(active),
+    /*TitleScene titleScene (.ix(x), .iy(y), .iactive(active),
         .ibtnC(btnC),
         .iPixCLK(PixCLK), .iCLK(CLK), .iPS2Clk(PS2Clk), .iPS2Data(PS2Data),
         .oRED(titleRED), .oGREEN(titleGREEN), .oBLUE(titleBLUE),
         .nextState(state0_nextState));
-    
+    */
     wire [3:0] barRED;
     wire [3:0] barGREEN;
     wire [3:0] barBLUE;
     wire [10:0] nextHealth;
     wire isEnding;
+    /*
     BarScene barScene (.xx(x), .yy(y), .aactive(active),
     .Pclk(PixCLK),
     .Reset(0), .ibtnX(btnC),
@@ -85,7 +86,7 @@ module Top(
     .health(10),
     .nextHealth(nextHealth)
     );
-    
+    */
     integer ms_count = 0;
     reg sec_pulse; 
     // draw on the active area of the screen
@@ -104,7 +105,7 @@ module Top(
         else
             ms_count <= ms_count+1;
           
-        hp_main <= hp_main_temp;
+        hp_main = hp_main_temp;
         if(hp_main < 0)
             hp_main <= 0;
         hp_main_check <= hp_main * 2 + 20;
