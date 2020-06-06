@@ -57,7 +57,7 @@ module BarScene(
     reg [1:0] dir = 1;
     reg [9:0] delaliens = 0;
 
-    reg de=0;
+    reg de=0, debounceC=0;
     reg space=0;
     initial
     begin
@@ -69,62 +69,69 @@ module BarScene(
     
     always @(posedge Pclk && state == 2)
     begin
-        //normal input
-        if (keycode[15:8] == 8'hf0) de=1;
-        else if (!de) begin space=0; end
-        else if (keycode[7:0] == 8'h29) begin space=1;de=0; end
-        
-        if (space==1 || ibtnX == 1)
+        if (state != 2)
+        begin
+            debounceC <= 0;
+        end
+        else
             begin
-                case(noksel)
-                    0:
-                        begin
-                            if (BarX > GoodScaleX)
+                if (ibtnX == 0) debounceC <= 1;
+                //normal input
+                if (keycode[15:8] == 8'hf0) de=1;
+                else if (!de) begin space=0; end
+                else if (keycode[7:0] == 8'h29) begin space=1;de=0; end
+                
+                if (space==1 || (ibtnX == 1 && debounceC == 1))
+                    begin
+                        case(noksel)
+                            0:
                                 begin
-                                    o_hp_mon1 <= hp_mon1 > ((440 - (BarX - GoodScaleX)) >> 3) ?  (hp_mon1 - ((440 - (BarX - GoodScaleX))>> 3)) : 0;
+                                    if (BarX > GoodScaleX)
+                                        begin
+                                            o_hp_mon1 <= hp_mon1 > ((440 - (BarX - GoodScaleX)) >> 3) ?  (hp_mon1 - ((440 - (BarX - GoodScaleX))>> 3)) : 0;
+                                        end
+                                    else
+                                        begin
+                                            o_hp_mon1 <= hp_mon1 > ((440 - (GoodScaleX - BarX)) >> 3) ? (hp_mon1 - ((440 - (GoodScaleX - BarX)) >> 3)) : 0;
+                                        end
+                                    o_hp_mon2 <= hp_mon2;
+                                    o_hp_mon3 <= hp_mon3;
                                 end
-                            else
+                            1:
                                 begin
-                                    o_hp_mon1 <= hp_mon1 > ((440 - (GoodScaleX - BarX)) >> 3) ? (hp_mon1 - ((440 - (GoodScaleX - BarX)) >> 3)) : 0;
+                                    if (BarX > GoodScaleX)
+                                        begin
+                                            o_hp_mon2 <= hp_mon2 > ((440 - (BarX - GoodScaleX)) >> 3) ? (hp_mon2 - ((440 - (BarX - GoodScaleX)) >> 3)) : 0;
+                                        end
+                                    else
+                                        begin
+                                            o_hp_mon2 <= hp_mon2 > ((440 - (GoodScaleX - BarX)) >> 3) ? ( hp_mon2 - ((440 - (GoodScaleX - BarX)) >> 3)) : 0;
+                                        end
+                                    o_hp_mon1 <= hp_mon1;
+                                    o_hp_mon3 <= hp_mon3;
                                 end
-                            o_hp_mon2 <= hp_mon2;
-                            o_hp_mon3 <= hp_mon3;
-                        end
-                    1:
-                        begin
-                            if (BarX > GoodScaleX)
+                            2: 
                                 begin
-                                    o_hp_mon2 <= hp_mon2 > ((440 - (BarX - GoodScaleX)) >> 3) ? (hp_mon2 - ((440 - (BarX - GoodScaleX)) >> 3)) : 0;
+                                    if (BarX > GoodScaleX)
+                                        begin
+                                            o_hp_mon3 <= hp_mon3 > ((440 - (BarX - GoodScaleX)) >> 3) ? hp_mon3 - ((440 - (BarX - GoodScaleX)) >> 3) : 0;
+                                        end
+                                    else
+                                        begin
+                                            o_hp_mon3 <= hp_mon3 > ((440 - (GoodScaleX - BarX)) >> 3) ? hp_mon3 - ((440 - (GoodScaleX - BarX)) >> 3) : 0;
+                                        end
+                                    o_hp_mon1 <= hp_mon1;
+                                    o_hp_mon2 <= hp_mon2;
                                 end
-                            else
+                            default:
                                 begin
-                                    o_hp_mon2 <= hp_mon2 > ((440 - (GoodScaleX - BarX)) >> 3) ? ( hp_mon2 - ((440 - (GoodScaleX - BarX)) >> 3)) : 0;
+                                    o_hp_mon1 <= hp_mon1;
+                                    o_hp_mon2 <= hp_mon2;
+                                    o_hp_mon3 <= hp_mon3;
                                 end
-                            o_hp_mon1 <= hp_mon1;
-                            o_hp_mon3 <= hp_mon3;
-                        end
-                    2: 
-                        begin
-                            if (BarX > GoodScaleX)
-                                begin
-                                    o_hp_mon3 <= hp_mon3 > ((440 - (BarX - GoodScaleX)) >> 3) ? hp_mon3 - ((440 - (BarX - GoodScaleX)) >> 3) : 0;
-                                end
-                            else
-                                begin
-                                    o_hp_mon3 <= hp_mon3 > ((440 - (GoodScaleX - BarX)) >> 3) ? hp_mon3 - ((440 - (GoodScaleX - BarX)) >> 3) : 0;
-                                end
-                            o_hp_mon1 <= hp_mon1;
-                            o_hp_mon2 <= hp_mon2;
-                        end
-                    default:
-                        begin
-                            o_hp_mon1 <= hp_mon1;
-                            o_hp_mon2 <= hp_mon2;
-                            o_hp_mon3 <= hp_mon3;
-                        end
-                endcase
-                nextState <= 1;
-            end
+                        endcase
+                        nextState <= 1;
+                end
         else
             begin
                 nextState <= 2;
@@ -149,6 +156,7 @@ module BarScene(
                             end
                     end
             end
+        end
     end
     
     always @(posedge Pclk && state == 2)
