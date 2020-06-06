@@ -93,56 +93,67 @@ output reg [1:0] noksel
     assign rights = keycode[7:0] == 8'h23;
     assign spaces = keycode[7:0] == 8'h29;
 
-    reg de=1;
-    reg up, down, left, right, space;
-    
+    reg de=0;
+    reg up, down, left, right, space = 0;
+always@(posedge iPixCLK)
+    begin
+//normal input
+        if (state == 3)
+            begin
+                if (keycode[15:8] == 8'hf0) de=1;
+                else if (!de) begin up=0;down=0;left=0;right=0;space=0; end
+                else if (keycode[7:0] == 8'h1d) begin up=1;de=0; end //press button
+                else if (keycode[7:0] == 8'h1b) begin down=1;de=0; end
+                else if (keycode[7:0] == 8'h23) begin left=1;de=0; end
+                else if (keycode[7:0] == 8'h1c) begin right=1;de=0; end
+                else if (keycode[7:0] == 8'h29) begin space=1;de=0; end
+                
+                if (ibtnL == 1 || left == 1)
+                    begin
+                        if (selection >= 1) selection <= 1;
+                        else selection <= selection + 1;
+                    end
+                else
+                if (ibtnR == 1 || right == 1)
+                    begin
+                        if (selection <= 0) selection <= 0;
+                        else selection <= selection - 1;
+                    end
+                    
+                if ((ibtnU==1 || up==1))
+                    begin
+                        noksel <= noksel < 1 ? 0 : noksel - 1;
+                    end
+                else
+                if ((ibtnD==1 || down==1))
+                    begin
+                        noksel <= noksel > 1 ? 2 : noksel + 1;
+                    end
+                
+        
+                if (space==1 || ibtnC == 1)
+                    begin
+                        case(selection)
+                            0: nextState <= 2;
+                            1: nextState <= 0;
+                            default: nextState <= 3;
+                        endcase
+                         //go to home pai gorn
+                    end
+                else
+                    begin
+                        nextState <= 3;
+                    end
+            end
+        else
+            begin
+                de<=0;
+                space<=0;
+            end
+        
+    end
 always @ (posedge iPixCLK && state == 3)
     begin
-        //normal input
-        if (keycode[15:8] == 8'hf0) de=1;
-        else if (!de) begin up=0;down=0;left=0;right=0;space=0; end
-        else if (keycode[7:0] == 8'h1d) begin up=1;de=0; end //press button
-        else if (keycode[7:0] == 8'h1b) begin down=1;de=0; end
-        else if (keycode[7:0] == 8'h23) begin left=1;de=0; end
-        else if (keycode[7:0] == 8'h1c) begin right=1;de=0; end
-        else if (keycode[7:0] == 8'h29) begin space=1;de=0; end
-        
-        if (ibtnL == 1 || left == 1)
-            begin
-                if (selection >= 1) selection <= 1;
-                else selection <= selection + 1;
-            end
-        else
-        if (ibtnR == 1 || right == 1)
-            begin
-                if (selection <= 0) selection <= 0;
-                else selection <= selection - 1;
-            end
-            
-        if ((ibtnU==1 || up==1))
-            begin
-                noksel <= noksel < 1 ? 0 : noksel - 1;
-            end
-        else
-        if ((ibtnD==1 || down==1))
-            begin
-                noksel <= noksel > 1 ? 2 : noksel + 1;
-            end
-        
-
-        if (space==1 || ibtnC == 1)
-            begin
-                case(selection)
-                    0: nextState <= 2;
-                    1: nextState <= 0;
-                    default: nextState <= 2;
-                endcase
-                 //go to home pai gorn
-            end
-        else
-            begin
-                nextState <= 3;
-            end
         
         if (iactive)
             begin
