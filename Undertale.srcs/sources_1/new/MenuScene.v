@@ -112,13 +112,13 @@ always@(posedge iPixCLK)
                 else if (ibtnR == 1 || keycode[7:0] == 8'h1c) begin right=1;de=0; end
                 else if (keycode[7:0] == 8'h29 || ibtnC == 1) begin space=1;de=0; end
                 
-                if (left == 1)
+                if (left == 1 | ibtnL == 1)
                     begin
                         if (selection >= 1) selection <= 1;
                         else selection <= selection + 1;
                     end
                 else
-                if (right == 1)
+                if (right == 1 | ibtnR == 1)
                     begin
                         if (selection <= 0) selection <= 0;
                         else selection <= selection - 1;
