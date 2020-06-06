@@ -66,18 +66,18 @@ module Top(
     wire [3:0] titleGREEN;
     wire [3:0] titleBLUE;
     wire [3:0] state0_nextState;
-    /*TitleScene titleScene (.ix(x), .iy(y), .iactive(active),
+    TitleScene titleScene (.ix(x), .iy(y), .iactive(active),
         .ibtnC(btnC),
         .iPixCLK(PixCLK), .iCLK(CLK), .iPS2Clk(PS2Clk), .iPS2Data(PS2Data),
         .oRED(titleRED), .oGREEN(titleGREEN), .oBLUE(titleBLUE),
         .nextState(state0_nextState));
-    */
+
     wire [3:0] barRED;
     wire [3:0] barGREEN;
     wire [3:0] barBLUE;
     wire [10:0] nextHealth;
     wire isEnding;
-    /*
+
     BarScene barScene (.xx(x), .yy(y), .aactive(active),
     .Pclk(PixCLK),
     .Reset(0), .ibtnX(btnC),
@@ -86,9 +86,24 @@ module Top(
     .health(10),
     .nextHealth(nextHealth)
     );
-    */
+
+    wire [3:0] menuRED;
+    wire [3:0] menuGREEN;
+    wire [3:0] menuBLUE;
+    wire [1:0] state3_nextState;
+    wire [1:0] noksel;
+    MenuScene menuScene (.ix(x), .iy(y), .iactive(active),
+        .ibtnC(btnC), .ibtnL(btnL), .ibtnR(btnR), .ibtnU(btnU), .ibtnD(btnD),
+        .iPixCLK(PixCLK), .iCLK(CLK), .iPS2Clk(PS2Clk), .iPS2Data(PS2Data),
+        .oRED(menuRED), .oGREEN(menuGREEN), .oBLUE(menuBLUE),
+        
+        .nextState(state3_nextState),.noksel(noksel)
+        );
+
+  
     integer ms_count = 0;
     reg sec_pulse; 
+
     // draw on the active area of the screen
     always @ (posedge PixCLK)
     begin
@@ -134,6 +149,14 @@ module Top(
                     RED <= barRED;
                     GREEN <= barGREEN;
                     BLUE <= barBLUE;
+                end
+            3: 
+                begin
+                    RED <= menuRED;
+                    GREEN <= menuGREEN;
+                    BLUE <= menuBLUE;
+                    state <= state3_nextState;
+                    
                 end
             default:
                 begin
