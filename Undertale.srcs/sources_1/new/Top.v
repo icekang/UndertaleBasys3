@@ -156,7 +156,7 @@ module Top(
                 hp_mon3 = o_hp_mon3;
         
             end
-        if((hp_mon1 == 0 && hp_mon2 == 0 && hp_mon3 == 0) || (mercy_nok1 && mercy_nok2 && mercy_nok3))
+        if((hp_mon1 == 0 | mercy_nok1) && (hp_mon2 == 0 | mercy_nok2) && (hp_mon3 == 0 | mercy_nok3))
         begin
             state <= 0;
         end
@@ -173,6 +173,9 @@ module Top(
             hp_mon1 = 100;
             hp_mon2 = 100;
             hp_mon3 = 100;
+            mercy_nok1 = 0;
+            mercy_nok2 = 0;
+            mercy_nok3 = 0;
         end
             
         hp_main_check <= hp_main * 2 + 20;
