@@ -72,20 +72,18 @@ output integer hpO = 100
     integer ms_count = 0;
     reg sec_pulse;
     reg BCol1=0,BCol2=0,BCol3=0;
-always@(posedge iPixCLK)
-    begin
-        if (state != 1)
-            begin
-                BCol1<=0;
-                BCol2<=0;
-                BCol3<=0;
-            end
-    end
 always @ (posedge iPixCLK)
     begin
          sec_pulse <= 0;
         if (ms_count == 999999)
                     begin
+                        if (state != 1)
+                            begin
+                                BCol1<=0;
+                                BCol2<=0;
+                                BCol3<=0;
+                            end
+                        else
                         if(BCol1 == 0 & (BeeSpriteOn == 1 & BulletSpriteOn == 1)& (palette[(dout*3)] > 0 | palette[(dout*3) + 1] > 0 | palette[(dout*3) + 2] > 0) & (palette[(B1out*3)] > 0 | palette[(B1out*3) + 1] > 0 | palette[(B1out*3) + 2] > 0))
                             begin
                                 BCol1 <= 1;
@@ -137,7 +135,7 @@ always @ (posedge iPixCLK)
                         oBLUE <= (palette[(BBout*3)+2])>>4;       // BLUE bits(7:4) from colour palette
                     end
                 else
-                if (BCol1==1 && BulletSpriteOn==1)
+                if (BCol1==0 && BulletSpriteOn==1)
                     begin
                         oRED <= (palette[(B1out*3)])>>4;          // RED bits(7:4) from colour palette
                         oGREEN <= (palette[(B1out*3)+1])>>4;      // GREEN bits(7:4) from colour palette
@@ -154,7 +152,7 @@ always @ (posedge iPixCLK)
                 if (BCol3==0 && Bullet3SpriteOn==1)
                     begin
                         oRED <= palette[(B31out*3)] == 8'h00 ? (palette[(B31out*3)])>>4 : 8'hcb>>4;          // RED bits(7:4) from colour palette
-                        oGREEN <= (palette[(B31out*3)+1])>>4;      // GREEN bits(7:4) from colour palette
+                        oGREEN <= palette[(B31out*3)+1] == 8'h00 ? (palette[(B31out*3)+1])>>4 : 8'hcb>>4;      // GREEN bits(7:4) from colour palette
                         oBLUE <=  palette[(B31out*3)+2] == 8'h00 ? (palette[(B31out*3)+2])>>4 : 8'hcb>>4;       // BLUE bits(7:4) from colour palette
                     end
                 else
