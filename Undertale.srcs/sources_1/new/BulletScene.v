@@ -98,16 +98,16 @@ always @ (posedge iPixCLK)
                         else if(BCol2 == 0 & (BeeSpriteOn == 1 & Bullet2SpriteOn == 1)& (palette[(dout*3)] > 0 | palette[(dout*3) + 1] > 0 | palette[(dout*3) + 2] > 0) & (palette[(B21out*3)] > 0 | palette[(B21out*3) + 1] > 0 | palette[(B21out*3) + 2] > 0))
                             begin
                                 BCol2 <= 1;
-                                hpO = hp - 2;
-                                if(hpO <= 0)
-                                    hpO = 0;
+                                hpO = hp + 2;
+                                if(hpO >= 100)
+                                    hpO = 100;
                                 ms_count <= 0;
                                 sec_pulse <= 1;
                             end
                         else if(BCol3 == 0 & (BeeSpriteOn == 1 & Bullet3SpriteOn == 1)& (palette[(dout*3)] > 0 | palette[(dout*3) + 1] > 0 | palette[(dout*3) + 2] > 0) & (palette[(B31out*3)] > 0 | palette[(B31out*3) + 1] > 0 | palette[(B31out*3) + 2] > 0))
                             begin
-                                BCol3 <= 1;
-                                hpO = hp - 2;
+                                BCol3 <= 0;
+                                hpO = hp;
                                 if(hpO <= 0)
                                     hpO = 0;
                                 ms_count <= 0;
@@ -137,7 +137,7 @@ always @ (posedge iPixCLK)
                         oBLUE <= (palette[(BBout*3)+2])>>4;       // BLUE bits(7:4) from colour palette
                     end
                 else
-                if (BCol1==0 && BulletSpriteOn==1)
+                if (BCol1==1 && BulletSpriteOn==1)
                     begin
                         oRED <= (palette[(B1out*3)])>>4;          // RED bits(7:4) from colour palette
                         oGREEN <= (palette[(B1out*3)+1])>>4;      // GREEN bits(7:4) from colour palette
@@ -146,16 +146,16 @@ always @ (posedge iPixCLK)
                 else
                 if (BCol2==0 && Bullet2SpriteOn==1)
                     begin
-                        oRED <= (palette[(B21out*3)])>>4;          // RED bits(7:4) from colour palette
+                        oRED <= 8'h00>>4;          // RED bits(7:4) from colour palette
                         oGREEN <= (palette[(B21out*3)+1])>>4;      // GREEN bits(7:4) from colour palette
-                        oBLUE <= (palette[(B21out*3)+2])>>4;       // BLUE bits(7:4) from colour palette
+                        oBLUE <= 8'h00>>4;      // BLUE bits(7:4) from colour palette
                     end
                 else
                 if (BCol3==0 && Bullet3SpriteOn==1)
                     begin
-                        oRED <= (palette[(B31out*3)])>>4;          // RED bits(7:4) from colour palette
+                        oRED <= palette[(B31out*3)] == 8'h00 ? (palette[(B31out*3)])>>4 : 8'hcb>>4;          // RED bits(7:4) from colour palette
                         oGREEN <= (palette[(B31out*3)+1])>>4;      // GREEN bits(7:4) from colour palette
-                        oBLUE <= (palette[(B31out*3)+2])>>4;       // BLUE bits(7:4) from colour palette
+                        oBLUE <=  palette[(B31out*3)+2] == 8'h00 ? (palette[(B31out*3)+2])>>4 : 8'hcb>>4;       // BLUE bits(7:4) from colour palette
                     end
                 else
                 if (NokauanSpriteOn==1)
