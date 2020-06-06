@@ -81,7 +81,7 @@ module BarScene(
                         begin
                             if (BarX > GoodScaleX)
                                 begin
-                                    o_hp_mon1 <= hp_mon1 > ((440 - (BarX - GoodScaleX)) >> 3) ?  (hp_mon1 - ((440 - (BarX - GoodScaleX))) >> 3) : 0;
+                                    o_hp_mon1 <= hp_mon1 > ((440 - (BarX - GoodScaleX)) >> 3) ?  (hp_mon1 - ((440 - (BarX - GoodScaleX))>> 3)) : 0;
                                 end
                             else
                                 begin
