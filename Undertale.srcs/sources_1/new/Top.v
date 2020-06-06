@@ -37,13 +37,13 @@ module Top(
     wire [6:0] hp_main_temp;
     integer hp_main_check;
     integer hp_mon1 = 100;
-    wire [10:0] o_hp_mon1 = 100;
+    wire [10:0] o_hp_mon1;
     integer hp_mon1_check ;
     integer hp_mon2 = 100;
-    wire [10:0] o_hp_mon2 = 100;
+    wire [10:0] o_hp_mon2;
     integer hp_mon2_prev = 100;
     integer hp_mon2_check ;
-    wire [10:0] o_hp_mon3 = 100;
+    wire [10:0] o_hp_mon3;
     integer hp_mon3 = 100;
     integer hp_mon3_check;
                         
@@ -132,26 +132,29 @@ module Top(
         if (ms_count == 199999999 & state == 1)
             begin
                 state <= 3;
-                //reset_count <= 1;
                 ms_count = 0;
-                //sec_pulse <= 1;
-//                hp_mon2 <= hp_mon2 - 1; 
-//                if(hp_mon2 <= 0)
-//                    hp_mon2 <= 0;
-//                hp_mon2_prev <= hp_mon2;
             end
         if(state == 1)
             begin
                 ms_count <= ms_count + 1;
                 hp_main = hp_main_temp;
+                hp_main = hp_main_temp;
+                hp_mon1 = o_hp_mon1;
+                hp_mon2 = o_hp_mon2;
+                hp_mon3 = o_hp_mon3;
+        
             end
           
-        hp_main = hp_main_temp;
-        hp_mon1 = o_hp_mon1;
-        hp_mon2 = o_hp_mon2;
-        hp_mon3 = o_hp_mon3;
-        if(hp_main <= 0)
+        if(hp_main <= 0 & state != 0)
+        begin
             hp_main <= 0;
+            state <= 0;
+            hp_main = 100;
+            hp_mon1 = 100;
+            hp_mon2 = 100;
+            hp_mon3 = 100;
+        end
+            
         hp_main_check <= hp_main * 2 + 20;
         hp_mon1_check <= hp_mon1 * 2 + 580;
         hp_mon2_check <= hp_mon2 * 2 + 580;
