@@ -18,6 +18,7 @@ output reg [3:0] oRED,
 output reg [3:0] oGREEN,
 output reg [3:0] oBLUE,
 
+input wire [3:0] state, 
 output reg [1:0] nextState,
 output reg [1:0] noksel
     );
@@ -134,7 +135,7 @@ always @ (posedge iPixCLK)
                 case(selection)
                     0: nextState <= 2;
                     1: nextState <= 0;
-                    default: nextState <= 0;
+                    default: nextState <= 2;
                 endcase
                  //go to home pai gorn
             end

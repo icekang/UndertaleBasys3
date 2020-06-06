@@ -17,12 +17,34 @@ module BarScene(
     output reg [3:0] oGREEN,
     output reg [3:0] oBLUE,
     output reg isEnding,
-    input wire [10:0] health,
-    output reg [10:0] nextHealth
+    
+    input wire iCLK,
+    input wire iPS2Clk,
+    input wire iPS2Data,
+    
+    input wire [1:0] noksel,
+    
+    input wire [10:0] hp_mon1,
+    input wire [10:0] hp_mon2,
+    input wire [10:0] hp_mon3,
+    output reg [10:0] o_hp_mon1,
+    output reg [10:0] o_hp_mon2,
+    output reg [10:0] o_hp_mon3,
+    
+    input wire [3:0] state,
+    output reg [3:0] nextState
 );
 
+    wire [15:0] keycode;
+    wire flag;
+    KBinput KBinput (
+        .clk(iCLK),
+        .kclk(iPS2Clk),
+        .kdata(iPS2Data),
+        .dataOut(keycode),
+        .oflag(flag)
+    );
     // setup character positions and sizes
-    reg isEnding = 0;
     reg [9:0] BarX = 0; // Bee X start position
     reg [8:0] BarY = 225; // Bee Y start position
     localparam BarWidth = 20; // Bee width in pixels
@@ -34,13 +56,80 @@ module BarScene(
     localparam GoodScaleHeight = 270;
     reg [1:0] dir = 1;
     reg [9:0] delaliens = 0;
-//    always @(posedge Reset)
-//    begin
-//        BarX = 0;
-//        isEnding = 0;
-//    end
-    always @(posedge Pclk)
+
+    reg de=1;
+    reg space;
+    initial
     begin
+        nextState <= 2;
+        o_hp_mon1 <= hp_mon1;
+        o_hp_mon2 <= hp_mon2;
+        o_hp_mon3 <= hp_mon3;
+    end
+    
+    always @(posedge Pclk && state == 3)
+    begin
+        //normal input
+        if (keycode[15:8] == 8'hf0) de=1;
+        else if (!de) begin space=0; end
+        else if (keycode[7:0] == 8'h29) begin space=1;de=0; end
+        
+        if (space==1 || ibtnX == 1)
+            begin
+                case(noksel)
+                    0:
+                        begin
+                            if (BarX > GoodScaleX)
+                                begin
+                                    o_hp_mon1 <= hp_mon1 > ((BarX - GoodScaleX) >> 3) ? hp_mon1 - ((BarX - GoodScaleX) >> 3) : 0;
+                                end
+                            else
+                                begin
+                                    o_hp_mon1 <= hp_mon1 > ((GoodScaleX - BarX) >> 3) ? hp_mon1 - ((GoodScaleX - BarX) >> 3) : 0;
+                                end
+                            o_hp_mon2 <= hp_mon2;
+                            o_hp_mon3 <= hp_mon3;
+                        end
+                    1:
+                        begin
+                            if (BarX > GoodScaleX)
+                                begin
+                                    o_hp_mon2 <= hp_mon2 > ((BarX - GoodScaleX) >> 3) ? hp_mon2 - ((BarX - GoodScaleX) >> 3) : 0;
+                                end
+                            else
+                                begin
+                                    o_hp_mon2 <= hp_mon2 > ((GoodScaleX - BarX) >> 3) ? hp_mon2 - ((GoodScaleX - BarX) >> 3) : 0;
+                                end
+                            o_hp_mon1 <= hp_mon1;
+                            o_hp_mon3 <= hp_mon3;
+                        end
+                    2: 
+                        begin
+                            if (BarX > GoodScaleX)
+                                begin
+                                    o_hp_mon3 <= hp_mon3 > ((BarX - GoodScaleX) >> 3) ? hp_mon3 - ((BarX - GoodScaleX) >> 3) : 0;
+                                end
+                            else
+                                begin
+                                    o_hp_mon3 <= hp_mon3 > ((GoodScaleX - BarX) >> 3) ? hp_mon3 - ((GoodScaleX - BarX) >> 3) : 0;
+                                end
+                            o_hp_mon1 <= hp_mon1;
+                            o_hp_mon2 <= hp_mon2;
+                        end
+                    default:
+                        begin
+                            o_hp_mon1 <= hp_mon1;
+                            o_hp_mon2 <= hp_mon2;
+                            o_hp_mon3 <= hp_mon3;
+                        end
+                endcase
+                nextState <= 1;
+            end
+        else
+            begin
+                nextState <= 2;
+            end
+
         if (xx==800 && yy==600)
             begin
                 delaliens<=delaliens+1;
@@ -81,17 +170,5 @@ module BarScene(
                 // render empty
                 else {oRED, oGREEN, oBLUE} <= 12'h000;
             end
-    end
-
-    always @(posedge ibtnX)
-    begin
-        // press x on good scale (HIT)
-        if (GoodScaleX < BarX + BarWidth && BarX < GoodScaleX + GoodScaleWidth)
-            begin
-                nextHealth <= health - 10;    
-                isEnding <= 1;
-            end
-        else // (MISS)
-            isEnding = 1;
     end
 endmodule
