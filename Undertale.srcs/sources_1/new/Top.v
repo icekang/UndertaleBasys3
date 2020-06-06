@@ -36,15 +36,15 @@ module Top(
     integer hp_main = 100;
     wire [6:0] hp_main_temp;
     integer hp_main_check;
-    integer hp_mon1 = 80;
-    wire [10:0] o_hp_mon1;
+    integer hp_mon1 = 100;
+    wire [10:0] o_hp_mon1 = 100;
     integer hp_mon1_check ;
     integer hp_mon2 = 100;
-    wire [10:0] o_hp_mon2;
+    wire [10:0] o_hp_mon2 = 100;
     integer hp_mon2_prev = 100;
     integer hp_mon2_check ;
-    wire [10:0] o_hp_mon3;
-    integer hp_mon3 = 50;
+    wire [10:0] o_hp_mon3 = 100;
+    integer hp_mon3 = 100;
     integer hp_mon3_check;
                         
     wire [3:0] bulletRED;
@@ -145,10 +145,6 @@ module Top(
                 ms_count <= ms_count + 1;
                 hp_main = hp_main_temp;
             end
-        
-        
-        else
-            ms_count <= ms_count+1;
           
         hp_main = hp_main_temp;
         hp_mon1 = o_hp_mon1;
@@ -180,9 +176,9 @@ module Top(
                 end
             2: 
                 begin
-                    RED <= barRED;
-                    GREEN <= barGREEN;
-                    BLUE <= barBLUE;
+                    RED <= barRED | {4{h_main}} | {4{h_main_box}} | {4{h_mon1_box}} | {4{h_mon2_box}} | {4{h_mon3_box}};
+                    GREEN <= barGREEN | {4{h_mon1}} | {4{h_mon2}} | {4{h_mon3}} | {4{h_main_box}} | {4{h_mon1_box}} | {4{h_mon2_box}} | {4{h_mon3_box}};
+                    BLUE <= barBLUE | {4{h_main_box}} | {4{h_mon1_box}} | {4{h_mon2_box}} | {4{h_mon3_box}};
                     state <= state2_nextState;
                 end
             3: 
