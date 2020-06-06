@@ -21,7 +21,7 @@ module Top(
     input btnD
     );
     
-    reg [3:0] state = 0;
+    reg [3:0] state = 1;
     wire [3:0] nextState;
     wire rst = 0;       // Setup Reset button
 
@@ -33,15 +33,35 @@ module Top(
     vga800x600 display (.i_clk(CLK),.i_rst(rst),.o_hsync(HSYNC), 
                         .o_vsync(VSYNC),.o_x(x),.o_y(y),.o_active(active),
                         .pix_clk(PixCLK));
+    integer hp_main = 100;
+    wire [6:0] hp_main_temp;
+    integer hp_main_check;
+    integer hp_mon1 = 80;
+    integer hp_mon1_check ;
+    integer hp_mon2 = 100;
+    integer hp_mon2_prev = 100;
+    integer hp_mon2_check ;
+    integer hp_mon3 = 50;
+    integer hp_mon3_check;
                         
     wire [3:0] bulletRED;
     wire [3:0] bulletGREEN;
     wire [3:0] bulletBLUE;
     BulletScene bulletScene (.ix(x), .iy(y), .iactive(active),
         .ibtnL(btnL), .ibtnR(btnR), .ibtnU(btnU), .ibtnD(btnD),
-        .iPixCLK(PixCLK), .iCLK(CLK), .iPS2Clk(PS2Clk), .iPS2Data(PS2Data),
-        .oRED(bulletRED), .oGREEN(bulletGREEN), .oBLUE(bulletBLUE));
+        .iPixCLK(PixCLK), .iCLK(CLK), .iPS2Clk(PS2Clk), .iPS2Data(PS2Data), .hp(hp_main),
+        .oRED(bulletRED), .oGREEN(bulletGREEN), .oBLUE(bulletBLUE), .hpO(hp_main_temp));
+    
+    wire h_main, h_mon1,  h_mon2, h_mon3, h_main_box, h_mon2_box, h_mon3_box, h_mon1_box;
+    assign h_main_box = (((y > 40) &(y < 70)) & ((x > 15) & (x <= 20) | ((x >= 220) & (x < 225)))) | ((x>20 & x < 220) & ((y<=40 & y>35) | (y >= 70 & y < 75) ) ) ? 1:0;
+    assign h_mon1_box = (((y > 40) &(y < 70)) & ((x > 575) & (x <= 580) | ((x >= 780) & (x < 785)))) | ((x > 580 & x < 780) & ((y<=40 & y>35) | (y >= 70 & y < 75) ) ) ? 1:0;
+    assign h_mon2_box = (((y > 90) &(y < 120)) & ((x > 575) & (x <= 580) | ((x >= 780) & (x < 785)))) | ((x > 580 & x < 780) & ((y<=90 & y>85) | (y >= 120 & y < 125) ) ) ? 1:0;
+    assign h_mon3_box = (((y > 140) &(y < 170)) & ((x > 575) & (x <= 580) | ((x >= 780) & (x < 785)))) | ((x > 580 & x < 780) & ((y<=140 & y>135) | (y >= 170 & y < 175) ) ) ? 1:0;
         
+    assign h_main = ((x > 20) & (y >  40) & (x < hp_main_check) & (y < 70)) ? 1 : 0;
+    assign h_mon1 = ((x > 580) & (y >  40) & (x < hp_mon1_check ) & (y < 70)) ? 1 : 0;
+    assign h_mon2 = ((x > 580) & (y >  90) & (x < hp_mon2_check) & (y < 120)) ? 1 : 0;
+    assign h_mon3 = ((x > 580) & (y >  140) & (x < hp_mon3_check) & (y < 170)) ? 1 : 0;       
     wire [3:0] titleRED;
     wire [3:0] titleGREEN;
     wire [3:0] titleBLUE;
@@ -51,12 +71,13 @@ module Top(
         .iPixCLK(PixCLK), .iCLK(CLK), .iPS2Clk(PS2Clk), .iPS2Data(PS2Data),
         .oRED(titleRED), .oGREEN(titleGREEN), .oBLUE(titleBLUE),
         .nextState(state0_nextState));
-    
+
     wire [3:0] barRED;
     wire [3:0] barGREEN;
     wire [3:0] barBLUE;
     wire [10:0] nextHealth;
     wire isEnding;
+
     BarScene barScene (.xx(x), .yy(y), .aactive(active),
     .Pclk(PixCLK),
     .Reset(0), .ibtnX(btnC),
@@ -65,7 +86,7 @@ module Top(
     .health(10),
     .nextHealth(nextHealth)
     );
-    
+
     wire [3:0] menuRED;
     wire [3:0] menuGREEN;
     wire [3:0] menuBLUE;
@@ -78,10 +99,37 @@ module Top(
         
         .nextState(state3_nextState),.noksel(noksel)
         );
-        
+
+  
+    integer ms_count = 0;
+    reg sec_pulse; 
+
     // draw on the active area of the screen
     always @ (posedge PixCLK)
     begin
+        sec_pulse <= 0;
+        if (ms_count == 99999999)
+            begin
+                ms_count <= 0;
+                sec_pulse <= 1;
+                hp_mon2 <= hp_mon2 - 1; 
+                if(hp_mon2 <= 0)
+                    hp_mon2 <= 0;
+                hp_mon2_prev <= hp_mon2;
+            end
+        else
+            ms_count <= ms_count+1;
+          
+        hp_main = hp_main_temp;
+        if(hp_main <= 0)
+            hp_main <= 0;
+        hp_main_check <= hp_main * 2 + 20;
+        hp_mon1_check <= hp_mon1 * 2 + 580;
+        hp_mon2_check <= hp_mon2 * 2 + 580;
+        hp_mon3_check <= hp_mon3 * 2 + 580;
+        
+        
+        
         case(state)
             0: 
                 begin
@@ -92,9 +140,9 @@ module Top(
                 end
             1: 
                 begin
-                    RED <= bulletRED;
-                    GREEN <= bulletGREEN;
-                    BLUE <= bulletBLUE;
+                    RED <= bulletRED | {4{h_main}} | {4{h_main_box}} | {4{h_mon1_box}} | {4{h_mon2_box}} | {4{h_mon3_box}} ;
+                    GREEN <= bulletGREEN | {4{h_mon1}} | {4{h_mon2}} | {4{h_mon3}} | {4{h_main_box}} | {4{h_mon1_box}} | {4{h_mon2_box}} | {4{h_mon3_box}};
+                    BLUE <= bulletBLUE | {4{h_main_box}} | {4{h_mon1_box}} | {4{h_mon2_box}} | {4{h_mon3_box}} ;
                 end
             2: 
                 begin

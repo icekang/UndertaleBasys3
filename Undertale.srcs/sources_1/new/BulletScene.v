@@ -12,10 +12,12 @@ input wire iPixCLK,
 input wire iCLK,
 input wire iPS2Clk,
 input wire iPS2Data,
+input wire [6:0] hp ,
 
 output reg [3:0] oRED,
 output reg [3:0] oGREEN,
-output reg [3:0] oBLUE
+output reg [3:0] oBLUE,
+output integer hpO = 100
     );
     // instantiate BeeSprite code
     wire BeeSpriteOn;       // 1=on, 0=off
@@ -50,10 +52,32 @@ output reg [3:0] oBLUE
     initial begin
         $readmemh("palall.mem", palette); // load 192 hex values into "palette"
     end
+    
+    integer ms_count = 0;
+    reg sec_pulse;
 always @ (posedge iPixCLK)
     begin
+         sec_pulse <= 0;
+        if (ms_count == 9999)
+                    begin
+                        if((BeeSpriteOn == 1 & BulletSpriteOn == 1)& (palette[(dout*3)] > 0 | palette[(dout*3) + 1] > 0 | palette[(dout*3) + 2] > 0) & (palette[(B1out*3)] > 0 | palette[(B1out*3) + 1] > 0 | palette[(B1out*3) + 2] > 0))
+                            begin
+                                hpO = hp - 2;
+                                if(hpO <= 0)
+                                    hpO = 0;
+                                ms_count <= 0;
+                                sec_pulse <= 1;
+                            end
+                        else
+                            hpO = hp;
+                        
+                    end
+                else
+                    ms_count <= ms_count + 1;
+                
         if (iactive)
             begin
+               
                 if (BeeSpriteOn==1)
                     begin
                         oRED <= (palette[(dout*3)])>>4;          // RED bits(7:4) from colour palette
