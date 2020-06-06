@@ -58,20 +58,22 @@ output integer hpO = 100
 always @ (posedge iPixCLK)
     begin
          sec_pulse <= 0;
-        //if (ms_count == 99999999)
-                    //begin
-                        if((BeeSpriteOn == 1 & BulletSpriteOn == 1)) //& (palette[(dout*3)] > 0 | palette[(dout*3) + 1] > 0 | palette[(dout*3) + 2] > 0) & (palette[(B1out*3)] > 0 | palette[(B1out*3) + 1] > 0 | palette[(B1out*3) + 2] > 0))
+        if (ms_count == 9999)
+                    begin
+                        if((BeeSpriteOn == 1 & BulletSpriteOn == 1)& (palette[(dout*3)] > 0 | palette[(dout*3) + 1] > 0 | palette[(dout*3) + 2] > 0) & (palette[(B1out*3)] > 0 | palette[(B1out*3) + 1] > 0 | palette[(B1out*3) + 2] > 0))
                             begin
                                 hpO = hp - 2;
-                                //ms_count <= 0;
-                                //sec_pulse <= 1;
+                                if(hpO <= 0)
+                                    hpO = 0;
+                                ms_count <= 0;
+                                sec_pulse <= 1;
                             end
                         else
                             hpO = hp;
                         
-        //            end
-//                else
-//                    ms_count <= ms_count + 1;
+                    end
+                else
+                    ms_count <= ms_count + 1;
                 
         if (iactive)
             begin

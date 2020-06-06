@@ -98,7 +98,7 @@ module Top(
                 ms_count <= 0;
                 sec_pulse <= 1;
                 hp_mon2 <= hp_mon2 - 1; 
-                if(hp_mon2 < 0)
+                if(hp_mon2 <= 0)
                     hp_mon2 <= 0;
                 hp_mon2_prev <= hp_mon2;
             end
@@ -106,7 +106,7 @@ module Top(
             ms_count <= ms_count+1;
           
         hp_main = hp_main_temp;
-        if(hp_main < 0)
+        if(hp_main <= 0)
             hp_main <= 0;
         hp_main_check <= hp_main * 2 + 20;
         hp_mon1_check <= hp_mon1 * 2 + 580;
