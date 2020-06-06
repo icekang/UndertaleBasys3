@@ -112,30 +112,30 @@ always@(posedge iPixCLK)
                 else if (ibtnR == 1 || keycode[7:0] == 8'h1c) begin right=1;de=0; end
                 else if (keycode[7:0] == 8'h29 || ibtnC == 1) begin space=1;de=0; end
                 
-                if (left == 1 | ibtnL == 1)
+                if (left == 1 || ibtnL == 1)
                     begin
                         if (selection >= 1) selection <= 1;
                         else selection <= selection + 1;
                     end
                 else
-                if (right == 1 | ibtnR == 1)
+                if (right == 1 || ibtnR == 1)
                     begin
                         if (selection <= 0) selection <= 0;
                         else selection <= selection - 1;
                     end
                     
-                if (up==1 | ibtnU == 1)
+                if (up==1 || ibtnU == 1)
                     begin
                         noksel <= noksel < 1 ? 0 : noksel - 1;
                     end
                 else
-                if ((down==1))
+                if ((down==1 || bdown ==1))
                     begin
                         noksel <= noksel > 1 ? 2 : noksel + 1;
                     end
                 
         
-                if (space==1| ibtnC == 1)
+                if (space==1 || ibtnC == 1)
                     begin
                         case(selection)
                             0: nextState <= 2;
@@ -198,9 +198,9 @@ always @ (posedge iPixCLK && state == 3)
                 else
                 if (SpriteOn2==1)
                     begin
-                        oRED <= (palette[((nokout+1)*3)])>>4;          // RED bits(7:4) from colour palette
-                        oGREEN <= (palette[((nokout+1)*3)+1])>>4;      // GREEN bits(7:4) from colour palette
-                        oBLUE <= (palette[((nokout+1)*3)+2])>>4;       // BLUE bits(7:4) from colour palette
+                        oRED <= palette[((nokout)*3)] == 8'h00 ? palette[((nokout)*3)]>>4 : (palette[((nokout+1)*3)])>>4;          // RED bits(7:4) from colour palette
+                        oGREEN <= palette[((nokout)*3)+1] == 8'h00 ? palette[((nokout)*3)+1]:(palette[((nokout+1)*3)+1])>>4;      // GREEN bits(7:4) from colour palette
+                        oBLUE <= palette[((nokout)*3 +2)] == 8'h00 ? (palette[((nokout)*3)+2])>>4:(palette[((nokout+1)*3)+2])>>4;       // BLUE bits(7:4) from colour palette
 //                        oRED <= palette[(nokout*3)] == 8'hff ? (8'h22)>>4 : palette[(nokout*3)]>>4;          // RED bits(7:4) from colour palette
 //                        oGREEN <= palette[(nokout*3)+1] == 8'hff ? (8'h8c)>>4 : palette[(nokout*3)+1]>>4;      // GREEN bits(7:4) from colour palette
 //                        oBLUE <= palette[(nokout*3)+2] == 8'hff ? (8'h22)>>4 : palette[(nokout*3)+2]>>4;       // BLUE bits(7:4) from colour palette
@@ -208,9 +208,10 @@ always @ (posedge iPixCLK && state == 3)
                 else
                 if (SpriteOn3==1)
                     begin
-                        oRED <= (palette[((nokout+2)*3)])>>4;          // RED bits(7:4) from colour palette
-                        oGREEN <= (palette[((nokout+2)*3)+1])>>4;      // GREEN bits(7:4) from colour palette
-                        oBLUE <= (palette[((nokout+2)*3)+2])>>4;       // BLUE bits(7:4) from colour palette
+                        oRED <= palette[((nokout)*3)] == 8'h00 ? palette[((nokout)*3)]>>4 : (palette[((nokout+2)*3)])>>4;          // RED bits(7:4) from colour palette
+                        oGREEN <= palette[((nokout)*3)+1] == 8'h00 ? palette[((nokout)*3)+1]:(palette[((nokout+2)*3)+1])>>4;      // GREEN bits(7:4) from colour palette
+                        oBLUE <= palette[((nokout)*3 +2)] == 8'h00 ? (palette[((nokout)*3)+2])>>4:(palette[((nokout+2)*3)+2])>>4;       // BLUE bits(7:4) from colour palette
+
 //                        oRED <= palette[(nokout*3)] == 8'hff ? (8'hf5)>>4 : palette[(nokout*3)]>>4;          // RED bits(7:4) from colour palette
 //                        oGREEN <= palette[(nokout*3)+1] == 8'hff ? (8'h1b)>>4 : palette[(nokout*3)+1]>>4;      // GREEN bits(7:4) from colour palette
 //                        oBLUE <= palette[(nokout*3)+2] == 8'hff ? (8'h00)>>4 : palette[(nokout*3)+2]>>4;       // BLUE bits(7:4) from colour palette
