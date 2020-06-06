@@ -48,10 +48,10 @@ always@(posedge iPixCLK)
         //normal input
         if(state == 0)
             begin
-                if (keycode[15:8] == 8'hf0) de=1;
+                if (keycode[15:8] == 8'hf0 || ibtnC == 0) de=1;
                 else if (!de) begin space=0; end
-                else if (keycode[7:0] == 8'h29) begin space=1;de=0; end
-                if (space == 1 || ibtnC == 1)
+                else if (keycode[7:0] == 8'h29 || ibtnC == 0) begin space=1;de=0; end
+                if (space == 1)
                     begin
                         nextState <= 3; //go to menu
                     end

@@ -100,38 +100,38 @@ always@(posedge iPixCLK)
 //normal input
         if (state == 3)
             begin
-                if (keycode[15:8] == 8'hf0) de=1;
+                if (ibtnR == 0 || ibtnL == 0 || ibtnD==0 || ibtnU==0 || keycode[15:8] == 8'hf0) de=1;
                 else if (!de) begin up=0;down=0;left=0;right=0;space=0; end
-                else if (keycode[7:0] == 8'h1d) begin up=1;de=0; end //press button
-                else if (keycode[7:0] == 8'h1b) begin down=1;de=0; end
-                else if (keycode[7:0] == 8'h23) begin left=1;de=0; end
-                else if (keycode[7:0] == 8'h1c) begin right=1;de=0; end
-                else if (keycode[7:0] == 8'h29) begin space=1;de=0; end
+                else if (ibtnU==1 || keycode[7:0] == 8'h1d) begin up=1;de=0; end //press button
+                else if (ibtnD==1 || keycode[7:0] == 8'h1b) begin down=1;de=0; end
+                else if (ibtnL == 1 || keycode[7:0] == 8'h23) begin left=1;de=0; end
+                else if (ibtnR == 1 || keycode[7:0] == 8'h1c) begin right=1;de=0; end
+                else if (keycode[7:0] == 8'h29 || ibtnC == 1) begin space=1;de=0; end
                 
-                if (ibtnL == 1 || left == 1)
+                if (left == 1)
                     begin
                         if (selection >= 1) selection <= 1;
                         else selection <= selection + 1;
                     end
                 else
-                if (ibtnR == 1 || right == 1)
+                if (right == 1)
                     begin
                         if (selection <= 0) selection <= 0;
                         else selection <= selection - 1;
                     end
                     
-                if ((ibtnU==1 || up==1))
+                if ((up==1))
                     begin
                         noksel <= noksel < 1 ? 0 : noksel - 1;
                     end
                 else
-                if ((ibtnD==1 || down==1))
+                if ((down==1))
                     begin
                         noksel <= noksel > 1 ? 2 : noksel + 1;
                     end
                 
         
-                if (space==1 || ibtnC == 1)
+                if (space==1)
                     begin
                         case(selection)
                             0: nextState <= 2;
