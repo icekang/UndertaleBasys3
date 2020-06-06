@@ -50,6 +50,7 @@ module Top(
     wire [3:0] bulletRED;
     wire [3:0] bulletGREEN;
     wire [3:0] bulletBLUE;
+    wire [1:0] noksel;
     BulletScene bulletScene (.ix(x), .iy(y), .iactive(active),
         .ibtnL(btnL), .ibtnR(btnR), .ibtnU(btnU), .ibtnD(btnD),
         .iPixCLK(PixCLK), .iCLK(CLK), .iPS2Clk(PS2Clk), .iPS2Data(PS2Data), .hp(hp_main),
@@ -81,7 +82,7 @@ module Top(
     wire [3:0] barBLUE;
 //    wire [10:0] nextHealth;
     wire isEnding;
-    wire [1:0] noksel;
+    
     wire [3:0] state2_nextState;
     
     BarScene barScene (.xx(x), .yy(y), .aactive(active),

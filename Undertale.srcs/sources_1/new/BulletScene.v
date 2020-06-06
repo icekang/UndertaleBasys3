@@ -159,9 +159,9 @@ always @ (posedge iPixCLK)
                 else
                 if (NokauanSpriteOn==1)
                     begin
-                        oRED <= (palette[(Nokout*3)])>>4;          // RED bits(7:4) from colour palette
-                        oGREEN <= (palette[(Nokout*3)+1])>>4;      // GREEN bits(7:4) from colour palette
-                        oBLUE <= (palette[(Nokout*3)+2])>>4;       // BLUE bits(7:4) from colour palette
+                        oRED <= palette[((Nokout)*3)] == 8'h00 ? (palette[(Nokout*3)])>>4 : (palette[((Nokout+noksel)*3)])>>4;          // RED bits(7:4) from colour palette
+                        oGREEN <= palette[((Nokout)*3)+1] == 8'h00 ? (palette[(Nokout*3)+1])>>4 : (palette[((Nokout+noksel)*3)+1])>>4;;      // GREEN bits(7:4) from colour palette
+                        oBLUE <= palette[((Nokout)*3)+2] == 8'h00 ? (palette[(Nokout*3)+2])>>4 : (palette[((Nokout+noksel)*3)+2])>>4;        // BLUE bits(7:4) from colour palette
                     end
                 else
                     begin

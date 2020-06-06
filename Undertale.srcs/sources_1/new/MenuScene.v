@@ -124,7 +124,7 @@ always@(posedge iPixCLK)
                         else selection <= selection - 1;
                     end
                     
-                if ((up==1))
+                if (up==1 | ibtnU == 1)
                     begin
                         noksel <= noksel < 1 ? 0 : noksel - 1;
                     end
@@ -135,7 +135,7 @@ always@(posedge iPixCLK)
                     end
                 
         
-                if (space==1)
+                if (space==1| ibtnC == 1)
                     begin
                         case(selection)
                             0: nextState <= 2;
