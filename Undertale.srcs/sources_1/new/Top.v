@@ -149,6 +149,10 @@ module Top(
         begin
             hp_main <= 0;
             state <= 0;
+        end
+        
+        if(state == 0)
+        begin
             hp_main = 100;
             hp_mon1 = 100;
             hp_mon2 = 100;
@@ -165,9 +169,9 @@ module Top(
         case(state)
             0: 
                 begin
-                    RED <= titleRED| {4{h_main}} | {4{h_main_box}} | {4{h_mon1_box}} | {4{h_mon2_box}} | {4{h_mon3_box}} ;
-                    GREEN <= titleGREEN | {4{h_mon1}} | {4{h_mon2}} | {4{h_mon3}} | {4{h_main_box}} | {4{h_mon1_box}} | {4{h_mon2_box}} | {4{h_mon3_box}};
-                    BLUE <= titleBLUE | {4{h_main_box}} | {4{h_mon1_box}} | {4{h_mon2_box}} | {4{h_mon3_box}} ;
+                    RED <= titleRED;
+                    GREEN <= titleGREEN;
+                    BLUE <= titleBLUE;
                     state <= state0_nextState;
                 end
             1: 

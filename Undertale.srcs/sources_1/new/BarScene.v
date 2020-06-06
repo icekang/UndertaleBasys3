@@ -81,11 +81,11 @@ module BarScene(
                         begin
                             if (BarX > GoodScaleX)
                                 begin
-                                    o_hp_mon1 <= hp_mon1 > ((BarX - GoodScaleX) >> 3) ? hp_mon1 - ((BarX - GoodScaleX) >> 3) : 0;
+                                    o_hp_mon1 <= hp_mon1 > ((440 - (BarX - GoodScaleX)) >> 3) ?  (hp_mon1 - ((440 - (BarX - GoodScaleX))) >> 3) : 0;
                                 end
                             else
                                 begin
-                                    o_hp_mon1 <= hp_mon1 > ((GoodScaleX - BarX) >> 3) ? hp_mon1 - ((GoodScaleX - BarX) >> 3) : 0;
+                                    o_hp_mon1 <= hp_mon1 > ((440 - (GoodScaleX - BarX)) >> 3) ? (hp_mon1 - ((440 - (GoodScaleX - BarX)) >> 3)) : 0;
                                 end
                             o_hp_mon2 <= hp_mon2;
                             o_hp_mon3 <= hp_mon3;
@@ -94,11 +94,11 @@ module BarScene(
                         begin
                             if (BarX > GoodScaleX)
                                 begin
-                                    o_hp_mon2 <= hp_mon2 > ((BarX - GoodScaleX) >> 3) ? hp_mon2 - ((BarX - GoodScaleX) >> 3) : 0;
+                                    o_hp_mon2 <= hp_mon2 > ((440 - (BarX - GoodScaleX)) >> 3) ? (hp_mon2 - ((440 - (BarX - GoodScaleX)) >> 3)) : 0;
                                 end
                             else
                                 begin
-                                    o_hp_mon2 <= hp_mon2 > ((GoodScaleX - BarX) >> 3) ? hp_mon2 - ((GoodScaleX - BarX) >> 3) : 0;
+                                    o_hp_mon2 <= hp_mon2 > ((440 - (GoodScaleX - BarX)) >> 3) ? ( hp_mon2 - ((440 - (GoodScaleX - BarX)) >> 3)) : 0;
                                 end
                             o_hp_mon1 <= hp_mon1;
                             o_hp_mon3 <= hp_mon3;
@@ -107,11 +107,11 @@ module BarScene(
                         begin
                             if (BarX > GoodScaleX)
                                 begin
-                                    o_hp_mon3 <= hp_mon3 > ((BarX - GoodScaleX) >> 3) ? hp_mon3 - ((BarX - GoodScaleX) >> 3) : 0;
+                                    o_hp_mon3 <= hp_mon3 > ((440 - (BarX - GoodScaleX)) >> 3) ? hp_mon3 - ((440 - (BarX - GoodScaleX)) >> 3) : 0;
                                 end
                             else
                                 begin
-                                    o_hp_mon3 <= hp_mon3 > ((GoodScaleX - BarX) >> 3) ? hp_mon3 - ((GoodScaleX - BarX) >> 3) : 0;
+                                    o_hp_mon3 <= hp_mon3 > ((440 - (GoodScaleX - BarX)) >> 3) ? hp_mon3 - ((440 - (GoodScaleX - BarX)) >> 3) : 0;
                                 end
                             o_hp_mon1 <= hp_mon1;
                             o_hp_mon2 <= hp_mon2;
