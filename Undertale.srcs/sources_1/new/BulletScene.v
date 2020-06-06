@@ -88,7 +88,7 @@ always @ (posedge iPixCLK)
                         if(BCol1 == 0 & (BeeSpriteOn == 1 & BulletSpriteOn == 1)& (palette[(dout*3)] > 0 | palette[(dout*3) + 1] > 0 | palette[(dout*3) + 2] > 0) & (palette[(B1out*3)] > 0 | palette[(B1out*3) + 1] > 0 | palette[(B1out*3) + 2] > 0))
                             begin
                                 BCol1 <= 1;
-                                hpO = hp - 2;
+                                hpO = hp - 20;
                                 if(hpO <= 0)
                                     hpO = 0;
                                 ms_count <= 0;
@@ -97,7 +97,7 @@ always @ (posedge iPixCLK)
                         else if(BCol2 == 0 & (BeeSpriteOn == 1 & Bullet2SpriteOn == 1)& (palette[(dout*3)] > 0 | palette[(dout*3) + 1] > 0 | palette[(dout*3) + 2] > 0) & (palette[(B21out*3)] > 0 | palette[(B21out*3) + 1] > 0 | palette[(B21out*3) + 2] > 0))
                             begin
                                 BCol2 <= 1;
-                                hpO = hp + 2;
+                                hpO = hp + 10;
                                 if(hpO >= 100)
                                     hpO = 100;
                                 ms_count <= 0;
