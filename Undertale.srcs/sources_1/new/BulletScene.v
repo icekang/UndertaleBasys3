@@ -72,7 +72,7 @@ output integer hpO = 100
 always @ (posedge iPixCLK)
     begin
          sec_pulse <= 0;
-        if (ms_count == 9999)
+        if (ms_count == 999999)
                     begin
                         if((BeeSpriteOn == 1 & BulletSpriteOn == 1)& (palette[(dout*3)] > 0 | palette[(dout*3) + 1] > 0 | palette[(dout*3) + 2] > 0) & (palette[(B1out*3)] > 0 | palette[(B1out*3) + 1] > 0 | palette[(B1out*3) + 2] > 0))
                             begin
