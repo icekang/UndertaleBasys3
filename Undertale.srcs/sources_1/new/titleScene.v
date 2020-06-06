@@ -14,6 +14,7 @@ output reg [3:0] oRED,
 output reg [3:0] oGREEN,
 output reg [3:0] oBLUE,
 
+input wire [3:0] state,
 output reg [3:0] nextState
     );
     
@@ -42,7 +43,7 @@ output reg [3:0] nextState
     end
     reg de=1;
     reg space;
-always @ (posedge iPixCLK)
+always @ (posedge iPixCLK && state == 0)
     begin
     //normal input
         if (keycode[15:8] == 8'hf0) de=1;

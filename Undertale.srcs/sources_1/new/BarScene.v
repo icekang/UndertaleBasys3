@@ -57,8 +57,8 @@ module BarScene(
     reg [1:0] dir = 1;
     reg [9:0] delaliens = 0;
 
-    reg de=1;
-    reg space;
+    reg de=0;
+    reg space=0;
     initial
     begin
         nextState <= 2;
@@ -67,7 +67,7 @@ module BarScene(
         o_hp_mon3 <= hp_mon3;
     end
     
-    always @(posedge Pclk && state == 3)
+    always @(posedge Pclk && state == 2)
     begin
         //normal input
         if (keycode[15:8] == 8'hf0) de=1;
@@ -151,7 +151,7 @@ module BarScene(
             end
     end
     
-    always @(posedge Pclk)
+    always @(posedge Pclk && state == 2)
     begin
         if (aactive)
             begin

@@ -73,7 +73,7 @@ module Top(
         .ibtnC(btnC),
         .iPixCLK(PixCLK), .iCLK(CLK), .iPS2Clk(PS2Clk), .iPS2Data(PS2Data),
         .oRED(titleRED), .oGREEN(titleGREEN), .oBLUE(titleBLUE),
-        .nextState(state0_nextState));
+        .state(state), .nextState(state0_nextState));
 
     wire [3:0] barRED;
     wire [3:0] barGREEN;
