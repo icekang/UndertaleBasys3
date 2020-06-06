@@ -129,7 +129,7 @@ always@(posedge iPixCLK)
                         noksel <= noksel < 1 ? 0 : noksel - 1;
                     end
                 else
-                if ((down==1))
+                if ((down==1 || bdown ==1))
                     begin
                         noksel <= noksel > 1 ? 2 : noksel + 1;
                     end
