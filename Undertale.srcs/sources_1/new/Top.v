@@ -100,27 +100,45 @@ module Top(
         .nextState(state3_nextState),.noksel(noksel)
         );
 
-  
+    reg reset_count;
     integer ms_count = 0;
-    reg sec_pulse; 
+    //reg sec_pulse;
+    //always @ (posedge CLK && state == 1)
+//    begin
+//            ms_count <= ms_count+1;
+//            if (reset_count == 1)
+//                 begin
+//                        ms_count <= 0;
+//                        reset_count <= 0;
+//                //sec_pulse <= 1;
+////                hp_mon2 <= hp_mon2 - 1; 
+////                if(hp_mon2 <= 0)
+////                    hp_mon2 <= 0;
+////                hp_mon2_prev <= hp_mon2;
+//                    end
+//    end
 
     // draw on the active area of the screen
     always @ (posedge PixCLK)
     begin
-        sec_pulse <= 0;
-        if (ms_count == 99999999)
+        if (ms_count == 199999999 & state == 1)
             begin
-                ms_count <= 0;
-                sec_pulse <= 1;
-                hp_mon2 <= hp_mon2 - 1; 
-                if(hp_mon2 <= 0)
-                    hp_mon2 <= 0;
-                hp_mon2_prev <= hp_mon2;
+                state <= 3;
+                //reset_count <= 1;
+                ms_count = 0;
+                //sec_pulse <= 1;
+//                hp_mon2 <= hp_mon2 - 1; 
+//                if(hp_mon2 <= 0)
+//                    hp_mon2 <= 0;
+//                hp_mon2_prev <= hp_mon2;
             end
-        else
-            ms_count <= ms_count+1;
-          
-        hp_main = hp_main_temp;
+        if(state == 1)
+            begin
+                ms_count <= ms_count + 1;
+                hp_main = hp_main_temp;
+            end
+        
+        
         if(hp_main <= 0)
             hp_main <= 0;
         hp_main_check <= hp_main * 2 + 20;
@@ -143,12 +161,13 @@ module Top(
                     RED <= bulletRED | {4{h_main}} | {4{h_main_box}} | {4{h_mon1_box}} | {4{h_mon2_box}} | {4{h_mon3_box}} ;
                     GREEN <= bulletGREEN | {4{h_mon1}} | {4{h_mon2}} | {4{h_mon3}} | {4{h_main_box}} | {4{h_mon1_box}} | {4{h_mon2_box}} | {4{h_mon3_box}};
                     BLUE <= bulletBLUE | {4{h_main_box}} | {4{h_mon1_box}} | {4{h_mon2_box}} | {4{h_mon3_box}} ;
+                    
                 end
             2: 
                 begin
-                    RED <= barRED;
-                    GREEN <= barGREEN;
-                    BLUE <= barBLUE;
+                    RED <= barRED | {4{h_main}} | {4{h_main_box}} | {4{h_mon1_box}} | {4{h_mon2_box}} | {4{h_mon3_box}};
+                    GREEN <= barGREEN | {4{h_mon1}} | {4{h_mon2}} | {4{h_mon3}} | {4{h_main_box}} | {4{h_mon1_box}} | {4{h_mon2_box}} | {4{h_mon3_box}};
+                    BLUE <= barBLUE | {4{h_main_box}} | {4{h_mon1_box}} | {4{h_mon2_box}} | {4{h_mon3_box}};
                 end
             3: 
                 begin
