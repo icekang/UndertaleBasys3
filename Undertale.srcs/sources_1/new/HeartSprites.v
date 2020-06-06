@@ -63,8 +63,8 @@ module BeeSprite(
             
             
     // setup character positions and sizes
-    reg [9:0] BeeX = 297; // Bee X start position
-    reg [8:0] BeeY = 433; // Bee Y start position
+    reg [9:0] BeeX = 400; // Bee X start position
+    reg [9:0] BeeY = 300; // Bee Y start position
     localparam BeeWidth = 25; // Bee width in pixels
     localparam BeeHeight = 23; // Bee height in pixels
     reg ups,downs,lefts,rights;
@@ -85,16 +85,16 @@ module BeeSprite(
         end
         if (xx==799 && yy==599)
             begin // check for left or right button pressed
-                if (BR == 1 && BeeX<800-BeeWidth)
+                if ((rights | BR == 1) && BeeX<514-BeeWidth)
                     BeeX<=BeeX+2;
-                if (BL == 1 && BeeX>1)
+                else if ((lefts | BL == 1) && BeeX>286 )
                     BeeX<=BeeX-2;
                 
-                if (BD == 1 && BeeY<600-BeeHeight)
+                if ((downs | BD == 1) && BeeY<514-BeeHeight)
                     BeeY<=BeeY+2;
-                if (BU == 1 && BeeY>1)
+                else if ((ups | BU == 1) && BeeY>286)
                     BeeY<=BeeY-2;
-                 
+                 /*
                 if (rights && BeeX<800-BeeWidth)
                     BeeX<=BeeX+2;
                 if (lefts && BeeX>1)
@@ -103,6 +103,7 @@ module BeeSprite(
                   BeeY<=BeeY+2;
                 if (ups && BeeY>1)
                   BeeY<=BeeY-2;
+                  */
             end    
         if (aactive)
             begin // check if xx,yy are within the confines of the Bee character
