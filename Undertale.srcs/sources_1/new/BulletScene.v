@@ -15,6 +15,7 @@ input wire iPS2Data,
 input wire [6:0] hp ,
 
 input wire [3:0] state,
+input wire [1:0] noksel,
 
 output reg [3:0] oRED,
 output reg [3:0] oGREEN,

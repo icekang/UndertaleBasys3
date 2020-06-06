@@ -41,17 +41,21 @@ output reg [3:0] nextState
     initial begin
         $readmemh("palall.mem", palette); // load 192 hex values into "palette"
     end
-    reg de=0;
-    reg space=0;
+    reg de=0, bde=0;
+    reg space=0,bspace=0;
 always@(posedge iPixCLK)
     begin
         //normal input
         if(state == 0)
             begin
-                if (keycode[15:8] == 8'hf0 || ibtnC == 0) de=1;
+                if (ibtnC == 0) bde=1;
+                else if (!bde) begin bspace=0; end
+                else if (ibtnC == 1) begin bspace=1;bde=0; end
+                
+                if (keycode[15:8] == 8'hf0) de=1;
                 else if (!de) begin space=0; end
-                else if (keycode[7:0] == 8'h29 || ibtnC == 0) begin space=1;de=0; end
-                if (space == 1)
+                else if (keycode[7:0] == 8'h29) begin space=1;de=0; end
+                if (space == 1 || bspace)
                     begin
                         nextState <= 3; //go to menu
                     end

@@ -93,14 +93,18 @@ output reg [1:0] noksel
     assign rights = keycode[7:0] == 8'h23;
     assign spaces = keycode[7:0] == 8'h29;
 
-    reg de=0;
-    reg up, down, left, right, space = 0;
+    reg de=0,bde=0;
+    reg up, down, bdown, left, right, space = 0;
 always@(posedge iPixCLK)
     begin
 //normal input
         if (state == 3)
             begin
-                if (ibtnR == 0 || ibtnL == 0 || ibtnD==0 || ibtnU==0 || keycode[15:8] == 8'hf0) de=1;
+                if (ibtnD==0) bde=1;
+                else if (!bde) begin bdown=0; end
+                else if (ibtnD==1) begin bdown=1;bde=0; end
+                
+                if (keycode[15:8] == 8'hf0) de=1;
                 else if (!de) begin up=0;down=0;left=0;right=0;space=0; end
                 else if (ibtnU==1 || keycode[7:0] == 8'h1d) begin up=1;de=0; end //press button
                 else if (ibtnD==1 || keycode[7:0] == 8'h1b) begin down=1;de=0; end

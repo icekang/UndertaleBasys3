@@ -53,7 +53,7 @@ module Top(
     BulletScene bulletScene (.ix(x), .iy(y), .iactive(active),
         .ibtnL(btnL), .ibtnR(btnR), .ibtnU(btnU), .ibtnD(btnD),
         .iPixCLK(PixCLK), .iCLK(CLK), .iPS2Clk(PS2Clk), .iPS2Data(PS2Data), .hp(hp_main),
-        .state(state),
+        .state(state),.noksel(noksel),
         .oRED(bulletRED), .oGREEN(bulletGREEN), .oBLUE(bulletBLUE), .hpO(hp_main_temp));
     
     wire h_main, h_mon1,  h_mon2, h_mon3, h_main_box, h_mon2_box, h_mon3_box, h_mon1_box;
