@@ -6,7 +6,7 @@
 `timescale 1ns / 1ps
 
 // Setup AlienSprites Module
-module BulletSprite(
+module BulletSprite2(
     input wire [9:0] xx,            // current x position
     input wire [9:0] yy,            // current y position
     input wire aactive,             // high during active pixel drawing
@@ -21,7 +21,7 @@ module BulletSprite(
 
     // setup character positions and sizes
     localparam BXstart = 285;
-    localparam BYstart = 285;
+    localparam BYstart = 285+100;
     reg [9:0] BX = BXstart;            // Alien1 X start position
     reg [9:0] BY = BYstart;             // Alien1 Y start position
     localparam BWidth = 12;        // Alien1 width in pixels
@@ -103,7 +103,7 @@ module BulletSprite(
                                 if (BYAccDel == 0)
                                     BYvel=BYvel+BYacc;
                                 BYvel=BYvel+BYacc;
-                                if (BX<BXstart || BY<285)
+                                if (BX<BXstart || BY<285+100)
                                     begin    
                                         Bdir<=1;
 //                                        BYvel<=0;

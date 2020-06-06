@@ -40,6 +40,20 @@ output integer hpO = 100
                           .BSpriteOn(BulletSpriteOn),.Bdataout(B1out),
                           .Pclk(iPixCLK));
     // instantiate BulletBoxSprite code
+    wire Bullet2SpriteOn;       // 1=on, 0=off
+    wire [7:0] B21out;        // pixel value from Bee.mem
+
+    BulletSprite2 Bullet2Display (.xx(ix),.yy(iy),.aactive(iactive),
+                          .BSpriteOn(Bullet2SpriteOn),.Bdataout(B21out),
+                          .Pclk(iPixCLK));
+    // instantiate BulletBoxSprite code
+    wire Bullet3SpriteOn;       // 1=on, 0=off
+    wire [7:0] B31out;        // pixel value from Bee.mem
+
+    BulletSprite3 Bullet3Display (.xx(ix),.yy(iy),.aactive(iactive),
+                          .BSpriteOn(Bullet3SpriteOn),.Bdataout(B31out),
+                          .Pclk(iPixCLK));
+    // instantiate BulletBoxSprite code
     wire NokauanSpriteOn;       // 1=on, 0=off
     wire [7:0] Nokout;        // pixel value from Bee.mem
     NokauanSprite NokauanDisplay (.xx(ix),.yy(iy),.aactive(iactive),
@@ -97,6 +111,20 @@ always @ (posedge iPixCLK)
                         oRED <= (palette[(B1out*3)])>>4;          // RED bits(7:4) from colour palette
                         oGREEN <= (palette[(B1out*3)+1])>>4;      // GREEN bits(7:4) from colour palette
                         oBLUE <= (palette[(B1out*3)+2])>>4;       // BLUE bits(7:4) from colour palette
+                    end
+                else
+                if (Bullet2SpriteOn==1)
+                    begin
+                        oRED <= (palette[(B21out*3)])>>4;          // RED bits(7:4) from colour palette
+                        oGREEN <= (palette[(B21out*3)+1])>>4;      // GREEN bits(7:4) from colour palette
+                        oBLUE <= (palette[(B21out*3)+2])>>4;       // BLUE bits(7:4) from colour palette
+                    end
+                else
+                if (Bullet3SpriteOn==1)
+                    begin
+                        oRED <= (palette[(B31out*3)])>>4;          // RED bits(7:4) from colour palette
+                        oGREEN <= (palette[(B31out*3)+1])>>4;      // GREEN bits(7:4) from colour palette
+                        oBLUE <= (palette[(B31out*3)+2])>>4;       // BLUE bits(7:4) from colour palette
                     end
                 else
                 if (NokauanSpriteOn==1)

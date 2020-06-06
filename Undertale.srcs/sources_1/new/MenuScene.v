@@ -96,7 +96,7 @@ output reg [1:0] noksel
     reg de=1;
     reg up, down, left, right, space;
     
-always @ (posedge iPixCLK)
+always @ (posedge iPixCLK && state == 3)
     begin
         //normal input
         if (keycode[15:8] == 8'hf0) de=1;
