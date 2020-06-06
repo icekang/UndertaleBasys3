@@ -18,6 +18,7 @@ output reg [3:0] oRED,
 output reg [3:0] oGREEN,
 output reg [3:0] oBLUE,
 
+input wire [3:0] state, 
 output reg [1:0] nextState,
 output reg [1:0] noksel
     );
@@ -95,7 +96,7 @@ output reg [1:0] noksel
     reg de=1;
     reg up, down, left, right, space;
     
-always @ (posedge iPixCLK)
+always @ (posedge iPixCLK && state == 3)
     begin
         //normal input
         if (keycode[15:8] == 8'hf0) de=1;
@@ -134,7 +135,7 @@ always @ (posedge iPixCLK)
                 case(selection)
                     0: nextState <= 2;
                     1: nextState <= 0;
-                    default: nextState <= 0;
+                    default: nextState <= 2;
                 endcase
                  //go to home pai gorn
             end

@@ -21,7 +21,7 @@ module Top(
     input btnD
     );
     
-    reg [3:0] state = 1;
+    reg [3:0] state = 0;
     wire [3:0] nextState;
     wire rst = 0;       // Setup Reset button
 
@@ -37,10 +37,13 @@ module Top(
     wire [6:0] hp_main_temp;
     integer hp_main_check;
     integer hp_mon1 = 80;
+    wire [10:0] o_hp_mon1;
     integer hp_mon1_check ;
     integer hp_mon2 = 100;
+    wire [10:0] o_hp_mon2;
     integer hp_mon2_prev = 100;
     integer hp_mon2_check ;
+    wire [10:0] o_hp_mon3;
     integer hp_mon3 = 50;
     integer hp_mon3_check;
                         
@@ -70,34 +73,39 @@ module Top(
         .ibtnC(btnC),
         .iPixCLK(PixCLK), .iCLK(CLK), .iPS2Clk(PS2Clk), .iPS2Data(PS2Data),
         .oRED(titleRED), .oGREEN(titleGREEN), .oBLUE(titleBLUE),
-        .nextState(state0_nextState));
+        .state(state), .nextState(state0_nextState));
 
     wire [3:0] barRED;
     wire [3:0] barGREEN;
     wire [3:0] barBLUE;
-    wire [10:0] nextHealth;
+//    wire [10:0] nextHealth;
     wire isEnding;
-
+    wire [1:0] noksel;
+    wire [3:0] state2_nextState;
+    
     BarScene barScene (.xx(x), .yy(y), .aactive(active),
     .Pclk(PixCLK),
     .Reset(0), .ibtnX(btnC),
     .oRED(barRED), .oGREEN(barGREEN), .oBLUE(barBLUE),
     .isEnding(isEnding),
-    .health(10),
-    .nextHealth(nextHealth)
+    .iCLK(CLK), .iPS2Clk(PS2Clk), .iPS2Data(PS2Data),
+    .noksel(noksel),
+    .hp_mon1(hp_mon1), .hp_mon2(hp_mon2), .hp_mon3(hp_mon3),
+    .o_hp_mon1(o_hp_mon1), .o_hp_mon2(o_hp_mon2), .o_hp_mon3(o_hp_mon3),
+    .state(state),.nextState(state2_nextState)
     );
 
     wire [3:0] menuRED;
     wire [3:0] menuGREEN;
     wire [3:0] menuBLUE;
     wire [1:0] state3_nextState;
-    wire [1:0] noksel;
+    
     MenuScene menuScene (.ix(x), .iy(y), .iactive(active),
         .ibtnC(btnC), .ibtnL(btnL), .ibtnR(btnR), .ibtnU(btnU), .ibtnD(btnD),
         .iPixCLK(PixCLK), .iCLK(CLK), .iPS2Clk(PS2Clk), .iPS2Data(PS2Data),
         .oRED(menuRED), .oGREEN(menuGREEN), .oBLUE(menuBLUE),
         
-        .nextState(state3_nextState),.noksel(noksel)
+        .state(state),.nextState(state3_nextState),.noksel(noksel)
         );
 
     reg reset_count;
@@ -139,6 +147,13 @@ module Top(
             end
         
         
+        else
+            ms_count <= ms_count+1;
+          
+        hp_main = hp_main_temp;
+        hp_mon1 = o_hp_mon1;
+        hp_mon2 = o_hp_mon2;
+        hp_mon3 = o_hp_mon3;
         if(hp_main <= 0)
             hp_main <= 0;
         hp_main_check <= hp_main * 2 + 20;
@@ -151,9 +166,9 @@ module Top(
         case(state)
             0: 
                 begin
-                    RED <= titleRED;
-                    GREEN <= titleGREEN;
-                    BLUE <= titleBLUE;
+                    RED <= titleRED| {4{h_main}} | {4{h_main_box}} | {4{h_mon1_box}} | {4{h_mon2_box}} | {4{h_mon3_box}} ;
+                    GREEN <= titleGREEN | {4{h_mon1}} | {4{h_mon2}} | {4{h_mon3}} | {4{h_main_box}} | {4{h_mon1_box}} | {4{h_mon2_box}} | {4{h_mon3_box}};
+                    BLUE <= titleBLUE | {4{h_main_box}} | {4{h_mon1_box}} | {4{h_mon2_box}} | {4{h_mon3_box}} ;
                     state <= state0_nextState;
                 end
             1: 
@@ -165,9 +180,10 @@ module Top(
                 end
             2: 
                 begin
-                    RED <= barRED | {4{h_main}} | {4{h_main_box}} | {4{h_mon1_box}} | {4{h_mon2_box}} | {4{h_mon3_box}};
-                    GREEN <= barGREEN | {4{h_mon1}} | {4{h_mon2}} | {4{h_mon3}} | {4{h_main_box}} | {4{h_mon1_box}} | {4{h_mon2_box}} | {4{h_mon3_box}};
-                    BLUE <= barBLUE | {4{h_main_box}} | {4{h_mon1_box}} | {4{h_mon2_box}} | {4{h_mon3_box}};
+                    RED <= barRED;
+                    GREEN <= barGREEN;
+                    BLUE <= barBLUE;
+                    state <= state2_nextState;
                 end
             3: 
                 begin
