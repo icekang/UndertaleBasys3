@@ -13,6 +13,9 @@ input wire iPixCLK,
 input wire iCLK,
 input wire iPS2Clk,
 input wire iPS2Data,
+input wire mnok1I,
+input wire mnok2I,
+input wire mnok3I,
 
 output reg [3:0] oRED,
 output reg [3:0] oGREEN,
@@ -20,7 +23,11 @@ output reg [3:0] oBLUE,
 
 input wire [3:0] state, 
 output reg [1:0] nextState,
-output reg [1:0] noksel
+output reg [1:0] noksel,
+output reg mnok1O,
+output reg mnok2O,
+output reg mnok3O
+
     );
     
     wire [15:0] keycode;
@@ -139,7 +146,32 @@ always@(posedge iPixCLK)
                     begin
                         case(selection)
                             0: nextState <= 2;
-                            1: nextState <= 0;
+                            1: 
+                            begin 
+                                nextState <= 2;
+                                case(noksel)
+                                    0:
+                                        begin
+                                            mnok1O <= 1;
+                                            mnok2O <= mnok2I;
+                                            mnok3O <= mnok3I;
+                                            
+                                        end
+                                    1:
+                                        begin
+                                            mnok1O <= mnok1I;
+                                            mnok2O <= 1;
+                                            mnok3O <= mnok3I;
+                                        end
+                                    2:
+                                        begin
+                                            mnok1O <= mnok1I;
+                                            mnok2O <= mnok2I;
+                                            mnok3O <= 1;
+                                            
+                                        end
+                                 endcase
+                            end
                             default: nextState <= 3;
                         endcase
                          //go to home pai gorn

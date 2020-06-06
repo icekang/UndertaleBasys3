@@ -66,7 +66,12 @@ module Top(
     assign h_main = ((x > 20) & (y >  40) & (x < hp_main_check) & (y < 70)) ? 1 : 0;
     assign h_mon1 = ((x > 580) & (y >  40) & (x < hp_mon1_check ) & (y < 70)) ? 1 : 0;
     assign h_mon2 = ((x > 580) & (y >  90) & (x < hp_mon2_check) & (y < 120)) ? 1 : 0;
-    assign h_mon3 = ((x > 580) & (y >  140) & (x < hp_mon3_check) & (y < 170)) ? 1 : 0;       
+    assign h_mon3 = ((x > 580) & (y >  140) & (x < hp_mon3_check) & (y < 170)) ? 1 : 0;
+    
+    assign m_mon1 = ((x > 580) & (y >  40) & (x < 780 ) & (y < 70)) ? 1 : 0;
+    assign m_mon2 = ((x > 580) & (y >  90) & (x < 780) & (y < 120)) ? 1 : 0;
+    assign m_mon3 = ((x > 580) & (y >  140) & (x < 780) & (y < 170)) ? 1 : 0;
+    
     wire [3:0] titleRED;
     wire [3:0] titleGREEN;
     wire [3:0] titleBLUE;
@@ -101,13 +106,18 @@ module Top(
     wire [3:0] menuGREEN;
     wire [3:0] menuBLUE;
     wire [1:0] state3_nextState;
-    
+    reg mercy_nok1 = 0;
+    reg mercy_nok2 = 0;
+    reg mercy_nok3 = 0;
+    wire mnok_temp1;
+    wire mnok_temp2;
+    wire mnok_temp3;
     MenuScene menuScene (.ix(x), .iy(y), .iactive(active),
         .ibtnC(btnC), .ibtnL(btnL), .ibtnR(btnR), .ibtnU(btnU), .ibtnD(btnD),
         .iPixCLK(PixCLK), .iCLK(CLK), .iPS2Clk(PS2Clk), .iPS2Data(PS2Data),
-        .oRED(menuRED), .oGREEN(menuGREEN), .oBLUE(menuBLUE),
+        .oRED(menuRED), .oGREEN(menuGREEN), .oBLUE(menuBLUE),.mnok1I(mercy_nok1), .mnok2I(mercy_nok2), .mnok3I(mercy_nok3),
         
-        .state(state),.nextState(state3_nextState),.noksel(noksel)
+        .state(state),.nextState(state3_nextState),.noksel(noksel), .mnok1O(mnok_temp1), .mnok2O(mnok_temp2), .mnok3O(mnok_temp3)
         );
 
     reg reset_count;
@@ -146,6 +156,10 @@ module Top(
                 hp_mon3 = o_hp_mon3;
         
             end
+        if((hp_mon1 == 0 && hp_mon2 == 0 && hp_mon3 == 0) || (mercy_nok1 && mercy_nok2 && mercy_nok3))
+        begin
+            state <= 0;
+        end
           
         if(hp_main <= 0 & state != 0)
         begin
@@ -166,6 +180,10 @@ module Top(
         hp_mon2_check <= hp_mon2 * 2 + 580;
         hp_mon3_check <= hp_mon3 * 2 + 580;
         
+        mercy_nok1 = mnok_temp1;
+        mercy_nok2 = mnok_temp2;
+        mercy_nok3 = mnok_temp3;
+        
         
         
         case(state)
@@ -178,16 +196,16 @@ module Top(
                 end
             1: 
                 begin
-                    RED <= bulletRED | {4{h_main}} | {4{h_main_box}} | {4{h_mon1_box}} | {4{h_mon2_box}} | {4{h_mon3_box}} ;
-                    GREEN <= bulletGREEN | {4{h_mon1}} | {4{h_mon2}} | {4{h_mon3}} | {4{h_main_box}} | {4{h_mon1_box}} | {4{h_mon2_box}} | {4{h_mon3_box}};
-                    BLUE <= bulletBLUE | {4{h_main_box}} | {4{h_mon1_box}} | {4{h_mon2_box}} | {4{h_mon3_box}} ;
+                    RED <= bulletRED | {4{h_main}} | {4{h_main_box}} | {4{h_mon1_box}} | {4{h_mon2_box}} | {4{h_mon3_box}} | {4{m_mon1 & mercy_nok1}} | {4{m_mon2 & mercy_nok2}} | {4{m_mon3 & mercy_nok3}} ;
+                    GREEN <= bulletGREEN | {4{h_mon1}} | {4{h_mon2}} | {4{h_mon3}} | {4{h_main_box}} | {4{h_mon1_box}} | {4{h_mon2_box}} | {4{h_mon3_box}} | {4{m_mon1 & mercy_nok1}} | {4{m_mon2 & mercy_nok2}} | {4{m_mon3 & mercy_nok3}};
+                    BLUE <= bulletBLUE | {4{h_main_box}} | {4{h_mon1_box}} | {4{h_mon2_box}} | {4{h_mon3_box}} | {4{m_mon1 & mercy_nok1}} | {4{m_mon2 & mercy_nok2}} | {4{m_mon3 & mercy_nok3}};
                     
                 end
             2: 
                 begin
-                    RED <= barRED | {4{h_main}} | {4{h_main_box}} | {4{h_mon1_box}} | {4{h_mon2_box}} | {4{h_mon3_box}};
-                    GREEN <= barGREEN | {4{h_mon1}} | {4{h_mon2}} | {4{h_mon3}} | {4{h_main_box}} | {4{h_mon1_box}} | {4{h_mon2_box}} | {4{h_mon3_box}};
-                    BLUE <= barBLUE | {4{h_main_box}} | {4{h_mon1_box}} | {4{h_mon2_box}} | {4{h_mon3_box}};
+                    RED <= barRED | {4{h_main}} | {4{h_main_box}} | {4{h_mon1_box}} | {4{h_mon2_box}} | {4{h_mon3_box}} | {4{m_mon1 & mercy_nok1}} | {4{m_mon2 & mercy_nok2}} | {4{m_mon3 & mercy_nok3}};
+                    GREEN <= barGREEN | {4{h_mon1}} | {4{h_mon2}} | {4{h_mon3}} | {4{h_main_box}} | {4{h_mon1_box}} | {4{h_mon2_box}} | {4{h_mon3_box}} | {4{m_mon1 & mercy_nok1}} | {4{m_mon2 & mercy_nok2}} | {4{m_mon3 & mercy_nok3}};
+                    BLUE <= barBLUE | {4{h_main_box}} | {4{h_mon1_box}} | {4{h_mon2_box}} | {4{h_mon3_box}} | {4{m_mon1 & mercy_nok1}} | {4{m_mon2 & mercy_nok2}} | {4{m_mon3 & mercy_nok3}};
                     state <= state2_nextState;
                 end
             3: 
